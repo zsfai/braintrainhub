@@ -1,0 +1,54 @@
+---
+import '../../styles/tools.css';
+---
+
+<div id="focus-timer-app" class="tool-shell">
+  <div class="focus-settings">
+    <label>
+      专注（分钟）
+      <input type="number" min="1" max="120" data-focus-min value="25" />
+    </label>
+    <label>
+      休息（分钟）
+      <input type="number" min="1" max="60" data-break-min value="5" />
+    </label>
+    <label>
+      长休息（分钟）
+      <input type="number" min="5" max="60" data-long-break-min value="15" />
+    </label>
+    <label>
+      循环次数
+      <input type="number" min="1" max="12" data-cycles value="4" />
+    </label>
+    <label class="focus-check">
+      <input type="checkbox" data-sound checked />
+      阶段提示音
+    </label>
+    <label class="focus-check">
+      <input type="checkbox" data-long-break />
+      每 4 段专注加长休息
+    </label>
+  </div>
+  <div class="tool-toolbar">
+    <div class="btn-row">
+      <button type="button" class="btn btn--primary" data-start>开始</button>
+      <button type="button" class="btn btn--ghost" data-pause>暂停</button>
+      <button type="button" class="btn btn--ghost" data-reset>重置</button>
+    </div>
+    <div class="tool-stats">
+      <span>阶段 <strong data-phase>专注中</strong></span>
+      <span>循环 <strong data-cycle>1 / 4</strong></span>
+    </div>
+  </div>
+  <div class="focus-timer-display">
+    <div class="focus-timer-display__time" data-time>25:00</div>
+    <div class="focus-timer-display__phase">倒计时同步到浏览器标签标题</div>
+  </div>
+  <p class="tool-feedback" data-feedback></p>
+</div>
+
+<script>
+  import { initFocusTimer } from '../../scripts/focus-timer/index.ts';
+  const app = document.getElementById('focus-timer-app');
+  if (app) initFocusTimer(app);
+</script>

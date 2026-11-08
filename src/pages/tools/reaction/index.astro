@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ToolPageShell from '../../../components/ToolPageShell.astro';
+import ReactionTool from '../../../components/tools/ReactionTool.astro';
+import { SITE_URL } from '../../../utils/site';
+import { toolBreadcrumbs, toolSchemas } from '../../../lib/tool-page-seo';
+
+const title = '简单反应时';
+const description = '在线简单反应时测试：信号变绿后尽快点击，观察警觉与反应稳定性。';
+const tips = ['变绿后尽快点击；Space 等同点击', '看中位反应时是否稳定，而非单次侥幸', '成绩保存在本机浏览器'];
+const schema = toolSchemas({
+  toolName: '简单反应时训练',
+  url: `${SITE_URL}/tools/reaction/`,
+  description,
+  tips,
+});
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/tools/reaction/"
+  schema={schema}
+  speakable={['#direct-answer', '.tool-tips']}
+  breadcrumbs={toolBreadcrumbs(title, '/tools/reaction/')}
+>
+  <ToolPageShell
+    title={title}
+    focus="警觉反应"
+    summary="每组 6 次有效试次，统计中位/均值/标准差。太早点击不计入。"
+    tips={tips}
+    principleHref="/principles/attention-systems/"
+    principleLabel="注意力系统"
+    methodHref="/methods/daily-rhythm/"
+    methodLabel="日程节奏"
+    planHref="/plans/7-day-reset/"
+    planLabel="7 日重置"
+  >
+    <ReactionTool />
+  </ToolPageShell>
+</BaseLayout>

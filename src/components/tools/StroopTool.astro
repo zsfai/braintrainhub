@@ -1,0 +1,37 @@
+---
+import '../../styles/tools.css';
+---
+
+<div id="stroop-app" class="tool-shell">
+  <div class="tool-toolbar">
+    <div class="btn-row">
+      <label>
+        试次
+        <select class="tool-select" data-len>
+          <option value="12">12</option>
+          <option value="24" selected>24</option>
+          <option value="36">36</option>
+        </select>
+      </label>
+      <button type="button" class="btn btn--primary" data-start>开始</button>
+    </div>
+    <div class="tool-stats">
+      <span>得分 <strong data-score>0/0</strong></span>
+      <span>用时 <strong data-timer>0.0s</strong></span>
+      <span>最佳正确率 <strong data-best>—</strong></span>
+    </div>
+  </div>
+  <div class="stroop-stage">
+    <div class="stroop-word" data-word>字色</div>
+    <div class="stroop-choices" data-choices></div>
+  </div>
+  <p class="tool-stats" data-effect style="justify-content:center;font-size:0.9rem;"></p>
+  <p class="tool-feedback" data-feedback></p>
+  <div class="tool-sessions" data-sessions hidden></div>
+</div>
+
+<script>
+  import { initStroop } from '../../scripts/stroop/index.ts';
+  const app = document.getElementById('stroop-app');
+  if (app) initStroop(app);
+</script>

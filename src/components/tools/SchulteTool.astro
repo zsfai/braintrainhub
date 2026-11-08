@@ -1,0 +1,51 @@
+---
+import '../../styles/tools.css';
+
+const schulteProUrl = 'https://schultetable.pro/zh/';
+---
+
+<div class="tool-pro-callout">
+  <p class="tool-pro-callout__title">需要专业级舒尔特训练？</p>
+  <p class="tool-pro-callout__desc">
+    本站为轻量练习版。毫秒级计时、多模式、红黑舒尔特与打印套件请前往专业「舒尔特方格」站。
+  </p>
+  <a class="btn btn--primary" href={schulteProUrl} target="_blank" rel="noopener noreferrer">
+    舒尔特方格 · schultetable.pro
+  </a>
+</div>
+
+<div id="schulte-app" class="tool-shell">
+  <div class="tool-toolbar">
+    <div class="btn-row">
+      <label>
+        规格
+        <select class="tool-select" data-size>
+          <option value="3">3×3</option>
+          <option value="4">4×4</option>
+          <option value="5" selected>5×5</option>
+          <option value="6">6×6</option>
+        </select>
+      </label>
+      <button type="button" class="btn btn--primary" data-start>开始（Space）</button>
+    </div>
+    <div class="tool-stats">
+      <span>用时 <strong data-timer>0.00s</strong></span>
+      <span>错误 <strong data-errors>0</strong></span>
+      <span>最佳 <strong data-best>—</strong></span>
+      <span>上次 <strong data-last>—</strong></span>
+    </div>
+  </div>
+  <p class="schulte-target">
+    下一个：<strong data-target>1</strong>
+    <span class="tool-countdown" data-countdown aria-live="polite"></span>
+  </p>
+  <div class="schulte-grid" data-grid aria-label="舒尔特方格"></div>
+  <p class="tool-feedback" data-feedback></p>
+  <div class="tool-sessions" data-sessions hidden></div>
+</div>
+
+<script>
+  import { initSchulte } from '../../scripts/schulte/index.ts';
+  const app = document.getElementById('schulte-app');
+  if (app) initSchulte(app);
+</script>

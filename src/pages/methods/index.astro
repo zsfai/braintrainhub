@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContentIndex from '../../components/ContentIndex.astro';
+import { getSorted } from '../../lib/content';
+import { collectionPageSchema, absUrl } from '../../lib/seo-schemas';
+
+const entries = await getSorted('methods');
+const title = '方法手段';
+const description = '环境设计、数字极简、离线练习、呼吸节奏与日程锚点——可立即执行的专注重建方法。';
+const schema = collectionPageSchema({
+  url: absUrl('/methods/'),
+  name: title,
+  description,
+  items: entries.map((e) => ({ name: e.data.title, url: absUrl(`/methods/${e.id}/`) })),
+});
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/methods/"
+  speakable
+  schema={schema}
+  breadcrumbs={[
+    { name: '首页', path: '/' },
+    { name: '方法手段', path: '/methods/' },
+  ]}
+>
+  <ContentIndex
+    kind="methods"
+    entries={entries}
+    lead="方法强调可执行与可重复。先改环境与节奏，再叠加认知训练，阻力会小很多。"
+  />
+</BaseLayout>

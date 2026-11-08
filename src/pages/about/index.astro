@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import DirectAnswer from '../../components/DirectAnswer.astro';
+import { SITE_TAGLINE } from '../../utils/site';
+
+const title = '关于 BrainTrainHub';
+const description = 'BrainTrainHub 的使命、内容边界与非医疗声明。';
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/about/"
+  speakable
+  breadcrumbs={[
+    { name: '首页', path: '/' },
+    { name: '关于', path: '/about/' },
+  ]}
+>
+  <div class="page-container page-container--narrow">
+    <Breadcrumb
+      items={[
+        { name: '首页', path: '/' },
+        { name: '关于', path: '/about/' },
+      ]}
+    />
+    <header class="page-hero">
+      <h1>关于 BrainTrainHub</h1>
+      <p>{SITE_TAGLINE}</p>
+    </header>
+    <DirectAnswer text="BrainTrainHub 收集认知训练工具、方法手段与原理科普，帮助重建专注与生活节律；具体边界见下文「我们做什么 / 我们不做什么」。" />
+
+    <div class="content-prose">
+      <h2>我们做什么</h2>
+      <ul>
+        <li>可在线练习的认知训练工具（注意力、工作记忆、抑制控制、节律）</li>
+        <li>行为与认知科学取向的原理科普</li>
+        <li>环境、习惯与日程层面的方法手段</li>
+        <li>把上述内容串起来的训练计划</li>
+      </ul>
+
+      <h2>我们不做什么</h2>
+      <ul>
+        <li>不做疾病诊断、心理治疗或康复医疗承诺</li>
+        <li>不提供药物、处方或临床评估量表解读</li>
+        <li>不夸大「重塑大脑」「治愈」等话术</li>
+      </ul>
+
+      <h2>内容原则</h2>
+      <p>
+        文案统一使用「认知训练 / 注意力练习 / 习惯重建 / 科普」等表述。涉及睡眠、动机与注意机制时，仅讨论表现与自我管理层面。若你正经历持续且严重的困扰，请寻求合格专业人士帮助。
+      </p>
+
+    </div>
+
+  </div>
+</BaseLayout>

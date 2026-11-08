@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import DirectAnswer from '../../components/DirectAnswer.astro';
+import { TOOLS } from '../../lib/tools';
+import { collectionPageSchema, absUrl } from '../../lib/seo-schemas';
+
+const title = '训练工具';
+const description = '舒尔特方格、反应时、N-Back、斯特鲁普与专注会话计时——在线认知训练工具合集。';
+const directAnswer =
+  'BrainTrainHub 提供五个免费在线认知训练工具，成绩保存在本机；适用于注意力、工作记忆、抑制控制与专注节律练习，非医疗用途。';
+const schema = collectionPageSchema({
+  url: absUrl('/tools/'),
+  name: title,
+  description,
+  items: TOOLS.map((tool) => ({ name: tool.title, url: absUrl(tool.path) })),
+});
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/tools/"
+  speakable
+  schema={schema}
+  breadcrumbs={[
+    { name: '首页', path: '/' },
+    { name: '训练工具', path: '/tools/' },
+  ]}
+>  <div class="page-container">
+    <Breadcrumb
+      items={[
+        { name: '首页', path: '/' },
+        { name: '训练工具', path: '/tools/' },
+      ]}
+    />
+    <header class="page-hero">
+      <h1>训练工具</h1>
+    </header>
+    <DirectAnswer text={directAnswer} />    <div class="index-grid">
+      {
+        TOOLS.map((tool, index) => (
+          <a class="index-item reveal-item" href={tool.path} style={`transition-delay: ${index * 70}ms`}>
+            <div class="index-item__meta">
+              <span class="badge">{tool.focus}</span>
+            </div>
+            <h2 class="index-item__title">{tool.title}</h2>
+            <p class="index-item__desc">{tool.description}</p>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const items = document.querySelectorAll('.reveal-item');
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.12 },
+  );
+  items.forEach((item) => io.observe(item));
+</script>

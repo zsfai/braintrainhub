@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ToolPageShell from '../../../components/ToolPageShell.astro';
+import FocusTimerTool from '../../../components/tools/FocusTimerTool.astro';
+import { SITE_URL } from '../../../utils/site';
+import { toolBreadcrumbs, toolSchemas } from '../../../lib/tool-page-seo';
+
+const title = '专注会话计时';
+const description = '可调节专注/休息节奏的会话计时器，帮助重建深度工作与数字断联练习。';
+const tips = ['阶段切换有短提示音（可关闭）', '每 4 段专注可开启长休息', '完成后请立刻进入一件真实深工'];
+const schema = toolSchemas({
+  toolName: '专注会话计时',
+  url: `${SITE_URL}/tools/focus-timer/`,
+  description,
+  tips,
+});
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/tools/focus-timer/"
+  schema={schema}
+  speakable={['#direct-answer', '.tool-tips']}
+  breadcrumbs={toolBreadcrumbs(title, '/tools/focus-timer/')}
+>
+  <ToolPageShell
+    title={title}
+    focus="节律重建"
+    summary="可调专注/休息/长休息；标签标题显示倒计时；后台自动暂停。"
+    tips={tips}
+    principleHref="/principles/reward-loop-short-video/"
+    principleLabel="刷刷机制"
+    methodHref="/methods/digital-environment/"
+    methodLabel="数字环境设计"
+    planHref="/plans/7-day-reset/"
+    planLabel="7 日重置"
+  >
+    <FocusTimerTool />
+  </ToolPageShell>
+</BaseLayout>

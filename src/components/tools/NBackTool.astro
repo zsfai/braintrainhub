@@ -1,0 +1,48 @@
+---
+import '../../styles/tools.css';
+---
+
+<div id="nback-app" class="tool-shell">
+  <div class="tool-toolbar">
+    <div class="btn-row">
+      <label>
+        N
+        <select class="tool-select" data-n>
+          <option value="1">1-Back</option>
+          <option value="2" selected>2-Back</option>
+          <option value="3">3-Back</option>
+        </select>
+      </label>
+      <label>
+        试次
+        <select class="tool-select" data-len>
+          <option value="16">16</option>
+          <option value="20" selected>20</option>
+          <option value="30">30</option>
+        </select>
+      </label>
+      <button type="button" class="btn btn--primary" data-start>开始</button>
+    </div>
+    <div class="tool-stats">
+      <span>进度 <strong data-round>0</strong></span>
+      <span>得分 <strong data-score>0/0</strong></span>
+      <span>最佳 <strong data-best>—</strong></span>
+    </div>
+  </div>
+  <div class="nback-stage">
+    <div class="nback-letter" data-letter>·</div>
+    <div class="nback-actions">
+      <button type="button" class="btn btn--primary" data-match disabled>相同 (F)</button>
+      <button type="button" class="btn btn--ghost" data-mismatch disabled>不同 (J)</button>
+    </div>
+  </div>
+  <p class="tool-stats" data-detail style="justify-content:center;margin-top:0.5rem;"></p>
+  <p class="tool-feedback" data-feedback></p>
+  <div class="tool-sessions" data-sessions hidden></div>
+</div>
+
+<script>
+  import { initNBack } from '../../scripts/nback/index.ts';
+  const app = document.getElementById('nback-app');
+  if (app) initNBack(app);
+</script>

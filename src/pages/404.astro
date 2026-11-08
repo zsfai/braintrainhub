@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = '页面未找到';
+const description = '你访问的页面不存在或已移动。可返回首页，或前往训练工具与常见问题。';
+---
+
+<BaseLayout title={title} description={description} canonical="/404/" noindex>
+  <div class="page-wrap">
+    <header class="page-hero">
+      <h1>{title}</h1>
+      <p>{description}</p>
+    </header>
+    <section class="prose" aria-labelledby="404-links">
+      <h2 id="404-links">你可以试试</h2>
+      <ul>
+        <li><a href="/">返回首页</a></li>
+        <li><a href="/tools/">训练工具</a></li>
+        <li><a href="/faq/">常见问题</a></li>
+      </ul>
+    </section>
+  </div>
+</BaseLayout>

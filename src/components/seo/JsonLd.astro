@@ -1,0 +1,20 @@
+---
+interface Props {
+  data: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const { data } = Astro.props;
+const list = Array.isArray(data) ? data : [data];
+
+function stripContext(entry: Record<string, unknown>) {
+  const { '@context': _ctx, ...rest } = entry;
+  return rest;
+}
+
+const payload = {
+  '@context': 'https://schema.org',
+  '@graph': list.map(stripContext),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(payload)} />

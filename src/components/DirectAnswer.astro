@@ -1,0 +1,12 @@
+---
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+---
+
+<section id="direct-answer" class="direct-answer" data-geo="direct-answer" itemprop="abstract">
+  <p class="direct-answer__label">一句话摘要</p>
+  <p class="direct-answer__text">{text}</p>
+</section>

@@ -1,0 +1,37 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContentArticle from '../../components/ContentArticle.astro';
+import { getSorted, resolveRelated } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const entries = await getSorted('methods');
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const related = await resolveRelated('methods', entry.data.related);
+---
+
+<BaseLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  canonical={`/methods/${entry.id}/`}
+  article
+  datePublished={entry.data.updated}
+  dateModified={entry.data.updated}
+  breadcrumbs={[
+    { name: '首页', path: '/' },
+    { name: '方法手段', path: '/methods/' },
+    { name: entry.data.h1, path: `/methods/${entry.id}/` },
+  ]}
+  speakable
+>
+  <ContentArticle kind="methods" entry={entry} related={related}>
+    <Content />
+  </ContentArticle>
+</BaseLayout>

@@ -1,0 +1,68 @@
+---
+import DirectAnswer from './DirectAnswer.astro';
+import Breadcrumb from './Breadcrumb.astro';
+import { kindLabel, kindPath, levelLabel, type ContentKind, type AnyEntry } from '../lib/content';
+import { type BreadcrumbItem } from '../utils/site';
+import { getTool } from '../lib/tools';
+
+interface Props {
+  kind: ContentKind;
+  entry: AnyEntry;
+  related: AnyEntry[];
+}
+
+const { kind, entry, related } = Astro.props;
+const crumbs: BreadcrumbItem[] = [
+  { name: '首页', path: '/' },
+  { name: kindLabel(kind), path: kindPath(kind) },
+  { name: entry.data.h1, path: `${kindPath(kind)}${entry.id}/` },
+];
+const tools = (entry.data.relatedTools ?? [])
+  .map((slug) => getTool(slug))
+  .filter((tool): tool is NonNullable<typeof tool> => Boolean(tool));
+---
+
+<article class="page-container page-container--narrow">
+  <Breadcrumb items={crumbs} />
+  <header class="page-hero">
+    <div class="index-item__meta" style="margin-bottom: 0.75rem;">
+      <span class="badge">{levelLabel(entry.data.level)}</span>
+      <span>{entry.data.category}</span>
+      {entry.data.updated && <span>更新于 {entry.data.updated}</span>}
+    </div>
+    <h1>{entry.data.h1}</h1>
+  </header>
+  <DirectAnswer text={entry.data.directAnswer} />
+  <div class="content-prose">
+    <slot />
+  </div>
+
+  {
+    tools.length > 0 && (
+      <section class="tool-intro">
+        <h2>相关训练工具</h2>
+        <div class="related-list">
+          {tools.map((tool) => (
+            <a href={tool.path}>
+              {tool.title} — {tool.focus}
+            </a>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    related.length > 0 && (
+      <section class="tool-intro">
+        <h2>相关阅读</h2>
+        <div class="related-list">
+          {related.map((item) => (
+            <a href={`${kindPath(kind)}${item.id}/`}>{item.data.title}</a>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+</article>

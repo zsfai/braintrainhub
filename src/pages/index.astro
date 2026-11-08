@@ -1,0 +1,138 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DirectAnswer from '../components/DirectAnswer.astro';
+import { TOOLS } from '../lib/tools';
+import { getSorted } from '../lib/content';
+import { t } from '../i18n';
+import { collectionPageSchema, absUrl } from '../lib/seo-schemas';
+import { SITE_FAQS } from '../content/faq';
+
+const ui = t('zh');
+const title = 'BrainTrainHub';
+const description =
+  'BrainTrainHub：认知训练工具、原理科普与可执行计划，帮助从短视频碎片化中重建专注与生活节律。';
+const directAnswer =
+  'BrainTrainHub 提供在线认知训练、原理科普与可执行计划，面向短视频碎片化后的专注力与节律重建；内容仅供科普，非医疗服务。';
+const principles = (await getSorted('principles')).slice(0, 3);
+const plans = (await getSorted('plans')).slice(0, 3);
+const homeFaqs = SITE_FAQS.slice(0, 3);
+const schema = collectionPageSchema({
+  url: absUrl('/'),
+  name: title,
+  description,
+  items: TOOLS.map((tool) => ({ name: tool.title, url: absUrl(tool.path) })),
+});
+---
+
+<BaseLayout title={title} description={description} canonical="/" speakable schema={schema}>  <section class="home-hero" aria-label="品牌首页">
+    <div class="home-hero__bg" aria-hidden="true"></div>
+    <div class="home-hero__content">
+      <h1 class="home-hero__brand">
+        {ui.siteName}
+        <span class="home-hero__tagline">{ui.tagline}</span>
+      </h1>
+      <p class="home-hero__lead">
+        短视频抽走的注意力，可以用训练与节律一点点找回来。这里有工具、原理与计划——只做专业科普，不做医疗承诺。
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="/tools/">{ui.ctaTrain}</a>
+        <a class="btn btn--ghost" href="/principles/">{ui.ctaPrinciples}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-section home-section--direct">
+    <DirectAnswer text={directAnswer} />
+  </section>
+
+  <section class="home-section">
+    <h2>从训练开始</h2>    <p class="home-section__lead">五个在线工具，覆盖注意力、反应、工作记忆、抑制控制与专注节律。</p>
+    <div class="index-grid">
+      {
+        TOOLS.map((tool, index) => (
+          <a class="index-item reveal-item" href={tool.path} style={`transition-delay: ${index * 70}ms`}>
+            <div class="index-item__meta">
+              <span class="badge">{tool.focus}</span>
+            </div>
+            <h3 class="index-item__title">{tool.title}</h3>
+            <p class="index-item__desc">{tool.description}</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="home-section">
+    <h2>先懂原理</h2>
+    <p class="home-section__lead">理解注意系统、奖赏回路与认知负荷，选练习才不盲目。</p>
+    <div class="index-grid">
+      {
+        principles.map((entry, index) => (
+          <a
+            class="index-item reveal-item"
+            href={`/principles/${entry.id}/`}
+            style={`transition-delay: ${index * 70}ms`}
+          >
+            <h3 class="index-item__title">{entry.data.title}</h3>
+            <p class="index-item__desc">{entry.data.description}</p>
+          </a>
+        ))
+      }
+    </div>
+    <p style="margin-top: 1rem;">
+      <a href="/principles/">查看全部原理 →</a>
+    </p>
+  </section>
+
+  <section class="home-section" style="padding-bottom: 4rem;">
+    <h2>跟着计划走</h2>
+    <p class="home-section__lead">7 日停损、21 日重建、四周综合——短而规律胜过偶发猛练。</p>
+    <div class="index-grid">
+      {
+        plans.map((entry, index) => (
+          <a class="index-item reveal-item" href={`/plans/${entry.id}/`} style={`transition-delay: ${index * 70}ms`}>
+            <h3 class="index-item__title">{entry.data.title}</h3>
+            <p class="index-item__desc">{entry.data.description}</p>
+          </a>
+        ))
+      }
+    </div>
+    <p style="margin-top: 1rem;">
+      <a href="/methods/">方法手段</a>
+      ·
+      <a href="/about/">关于与声明</a>
+      ·
+      <a href="/faq/">常见问题</a>
+    </p>
+  </section>
+
+  <section class="home-section page-container--narrow" style="padding-top: 0; padding-bottom: 4rem;">
+    <h2>常见问题</h2>
+  <ul class="faq-list faq-list--compact">
+      {
+        homeFaqs.map((item) => (
+          <li class="faq-item">
+            <h3 class="faq-item__q">{item.question}</h3>
+            <p class="faq-item__a">{item.answer}</p>
+          </li>
+        ))
+      }
+    </ul>
+    <p style="margin-top: 0.75rem;"><a href="/faq/">查看全部常见问题 →</a></p>
+  </section>
+</BaseLayout>
+<script>
+  const items = document.querySelectorAll('.reveal-item');
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.12 },
+  );
+  items.forEach((item) => io.observe(item));
+</script>

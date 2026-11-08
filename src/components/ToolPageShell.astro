@@ -1,0 +1,66 @@
+---
+import Breadcrumb from './Breadcrumb.astro';
+
+interface Props {
+  title: string;
+  focus: string;
+  summary: string;
+  principleHref: string;
+  principleLabel: string;
+  methodHref?: string;
+  methodLabel?: string;
+  planHref?: string;
+  planLabel?: string;
+  tips?: string[];
+}
+
+const {
+  title,
+  focus,
+  summary,
+  principleHref,
+  principleLabel,
+  methodHref,
+  methodLabel,
+  planHref,
+  planLabel,
+  tips = [],
+} = Astro.props;
+---
+
+<div class="page-container">
+  <Breadcrumb
+    items={[
+      { name: '首页', path: '/' },
+      { name: '训练工具', path: '/tools/' },
+      { name: title, path: Astro.url.pathname },
+    ]}
+  />
+  <header class="page-hero page-hero--minimal">
+    <div class="index-item__meta" style="margin-bottom: 0.5rem;">
+      <span class="badge">{focus}</span>
+    </div>
+    <h1>{title}</h1>
+    <p id="direct-answer" class="page-hero__summary">{summary}</p>
+  </header>
+
+  <slot />
+
+  <section class="tool-intro">
+    <h2>怎么用这个工具</h2>
+    {
+      tips.length > 0 && (
+        <ul class="tool-tips">
+          {tips.map((tip) => (
+            <li>{tip}</li>
+          ))}
+        </ul>
+      )
+    }
+    <div class="related-list">
+      <a href={principleHref}>原理：{principleLabel}</a>
+      {methodHref && methodLabel && <a href={methodHref}>方法：{methodLabel}</a>}
+      {planHref && planLabel && <a href={planHref}>计划：{planLabel}</a>}
+    </div>
+  </section>
+</div>

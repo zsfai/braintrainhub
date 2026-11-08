@@ -1,0 +1,24 @@
+---
+import type { FaqItem } from '../lib/seo-schemas';
+
+interface Props {
+  items: FaqItem[];
+  heading?: string;
+}
+
+const { items, heading = '常见问题' } = Astro.props;
+---
+
+<section class="faq-section" aria-labelledby="faq-heading">
+  <h2 id="faq-heading">{heading}</h2>
+  <ul class="faq-list">
+    {
+      items.map((item) => (
+        <li class="faq-item">
+          <h3 class="faq-item__q">{item.question}</h3>
+          <p class="faq-item__a">{item.answer}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>

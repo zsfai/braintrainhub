@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContentIndex from '../../components/ContentIndex.astro';
+import { getSorted } from '../../lib/content';
+import { collectionPageSchema, absUrl } from '../../lib/seo-schemas';
+
+const entries = await getSorted('plans');
+const title = '训练计划';
+const description = '7 日重置、21 日专注重建与四周综合计划，把工具、方法与原理串成可执行路径。';
+const schema = collectionPageSchema({
+  url: absUrl('/plans/'),
+  name: title,
+  description,
+  items: entries.map((e) => ({ name: e.data.title, url: absUrl(`/plans/${e.id}/`) })),
+});
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/plans/"
+  speakable
+  schema={schema}
+  breadcrumbs={[
+    { name: '首页', path: '/' },
+    { name: '训练计划', path: '/plans/' },
+  ]}
+>
+  <ContentIndex
+    kind="plans"
+    entries={entries}
+    lead="选一个符合当前状态的计划开始。短而规律，胜过偶发猛练。"
+  />
+</BaseLayout>

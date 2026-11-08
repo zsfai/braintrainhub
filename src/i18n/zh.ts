@@ -1,0 +1,38 @@
+import type { UiDict } from './types';
+
+export const zh: UiDict = {
+  siteName: 'BrainTrainHub',
+  tagline: '认知训练与专注力重建',
+  nav: [
+    { href: '/tools/', label: '训练工具' },
+    { href: '/principles/', label: '原理科普' },
+    { href: '/methods/', label: '方法手段' },
+    { href: '/plans/', label: '训练计划' },
+    { href: '/about/', label: '关于' },
+  ],
+  ctaTrain: '开始训练',
+  ctaPrinciples: '了解原理',
+  footerAbout: 'BrainTrainHub 收集认知训练工具、方法与科普知识，帮助重建专注与生活节律。',
+  breadcrumbHome: '首页',
+  level: {
+    beginner: '入门',
+    intermediate: '进阶',
+    advanced: '挑战',
+  },
+  related: '相关阅读',
+  startTraining: '开始练习',
+  bestScore: '最佳成绩',
+  lastScore: '上次成绩',
+  reset: '重置',
+  start: '开始',
+  pause: '暂停',
+  resume: '继续',
+  next: '下一轮',
+  correct: '正确',
+  wrong: '错误',
+  ready: '准备',
+  round: '轮次',
+  time: '用时',
+  accuracy: '正确率',
+  settings: '设置',
+};

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://braintrainhub.com/sitemap-index.xml
