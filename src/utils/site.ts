@@ -2,6 +2,7 @@ export const SITE_URL = 'https://braintrainlab.com';
 export const SITE_NAME = 'BrainTrainLab';
 export const SITE_TAGLINE = '认知训练与专注力重建';
 export const OG_IMAGE = `${SITE_URL}/og.svg`;
+export const SITE_FAVICON = '/think.png';
 export const THEME_COLOR = '#0F766E';
 export const ORG_ID = `${SITE_URL}/#organization`;
 export const WEBSITE_ID = `${SITE_URL}/#website`;
@@ -30,7 +31,7 @@ export function organizationSchema(description: string, inLanguage: string) {
     inLanguage,
     logo: {
       '@type': 'ImageObject',
-      url: `${SITE_URL}/favicon.svg`,
+      url: `${SITE_URL}${SITE_FAVICON}`,
     },
     knowsAbout: [...KNOWS_ABOUT],
   };
@@ -86,7 +87,7 @@ export function articleSchema(opts: {
       name: SITE_NAME,
       logo: {
         '@type': 'ImageObject',
-        url: `${SITE_URL}/favicon.svg`,
+        url: `${SITE_URL}${SITE_FAVICON}`,
       },
     },
     datePublished: opts.datePublished,

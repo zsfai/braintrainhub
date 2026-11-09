@@ -16,6 +16,7 @@ import {
 import {
   SITE_URL,
   SITE_NAME,
+  SITE_FAVICON,
   OG_IMAGE,
   THEME_COLOR,
   articleSchema,
@@ -148,7 +149,8 @@ const xDefaultUrl = `${SITE_URL}${localePath('zh', canonical)}`;
       ))
     }
     <link rel="alternate" hreflang="x-default" href={xDefaultUrl} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={SITE_FAVICON} type="image/png" sizes="200x200" />
+    <link rel="apple-touch-icon" href={SITE_FAVICON} />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-readable site summary" />
     <meta property="og:title" content={fullTitle} />

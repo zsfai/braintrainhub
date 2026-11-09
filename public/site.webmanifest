@@ -9,10 +9,16 @@
   "lang": "zh-CN",
   "icons": [
     {
-      "src": "/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "/think.png",
+      "sizes": "200x200",
+      "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/think.png",
+      "sizes": "200x200",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
