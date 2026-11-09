@@ -1,6 +1,6 @@
 {
-  "name": "BrainTrainHub",
-  "short_name": "BrainTrainHub",
+  "name": "BrainTrainLab",
+  "short_name": "BrainTrainLab",
   "description": "认知训练与专注力重建",
   "start_url": "/",
   "display": "standalone",

@@ -1,0 +1,48 @@
+---
+import Breadcrumb from '../Breadcrumb.astro';
+import DirectAnswer from '../DirectAnswer.astro';
+import { localePath, t, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = t(locale);
+const about = ui.about;
+const lp = (path: string) => localePath(locale, path);
+---
+
+<div class="page-container page-container--narrow">
+  <Breadcrumb
+    items={[
+      { name: ui.breadcrumbHome, path: '/' },
+      { name: ui.navAbout, path: '/about/' },
+    ]}
+    locale={locale}
+  />
+  <header class="page-hero">
+    <h1>{about.title}</h1>
+    <p>{ui.tagline}</p>
+  </header>
+    <DirectAnswer text={about.directAnswer} locale={locale} />
+
+  <div class="content-prose">
+    <h2>{about.weDo}</h2>
+    <ul>
+      {about.weDoItems.map((item) => (
+        <li>{item}</li>
+      ))}
+    </ul>
+
+    <h2>{about.weDont}</h2>
+    <ul>
+      {about.weDontItems.map((item) => (
+        <li>{item}</li>
+      ))}
+    </ul>
+
+    <h2>{about.principles}</h2>
+    <p>{about.principlesBody}</p>
+  </div>
+</div>

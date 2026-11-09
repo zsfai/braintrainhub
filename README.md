@@ -1,4 +1,4 @@
-# BrainTrainHub
+# BrainTrainLab
 
 认知训练与专注力重建：在线训练工具 + 原理科普 + 方法手段 + 训练计划。
 

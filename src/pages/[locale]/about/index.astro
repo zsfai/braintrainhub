@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import AboutPage from '../../../components/pages/AboutPage.astro';
+import { t } from '../../../i18n';
+import { PREFIXED_LOCALES } from '../../../i18n/routing';
+
+export function getStaticPaths() {
+  return PREFIXED_LOCALES.map((locale) => ({ params: { locale }, props: { locale } }));
+}
+
+const { locale } = Astro.props;
+const about = t(locale).about;
+---
+
+<BaseLayout
+  locale={locale}
+  title={about.title}
+  description={about.metaDescription}
+  canonical="/about/"
+  speakable
+  breadcrumbs={[
+    { name: t(locale).breadcrumbHome, path: '/' },
+    { name: t(locale).navAbout, path: '/about/' },
+  ]}
+>
+  <AboutPage locale={locale} />
+</BaseLayout>

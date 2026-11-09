@@ -1,45 +1,32 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import ToolPageShell from '../../../components/ToolPageShell.astro';
-import SchulteTool from '../../../components/tools/SchulteTool.astro';
-import { SITE_URL } from '../../../utils/site';
-import { toolBreadcrumbs, toolSchemas } from '../../../lib/tool-page-seo';
+import ToolDetailPage from '../../../components/pages/ToolDetailPage.astro';
+import { getToolPage, toolCanonical } from '../../../lib/tool-pages';
+import { toolBreadcrumbs, toolPageUrl, toolSchemas } from '../../../lib/tool-page-seo';
 
-const title = '舒尔特方格';
-const description = '轻量舒尔特方格在线练习；进阶训练请前往舒尔特方格专业站（schultetable.pro）。';
-const tips = [
-  '开局 3 秒倒计时后计时，按 Space 可快速开始新一轮',
-  '先求少错，再求更快；注视中心、余光扫格',
-  '完整功能见「舒尔特方格」专业站（schultetable.pro）',
-];
-const schema = toolSchemas({
-  toolName: '舒尔特方格训练',
-  url: `${SITE_URL}/tools/schulte/`,
-  description,
-  tips,
-});
+const locale = 'zh';
+const slug = 'schulte';
+const page = getToolPage(slug, locale);
+const canonical = toolCanonical(slug);
+const schema = toolSchemas(
+  {
+    toolName: page.toolAppName,
+    url: toolPageUrl(locale, canonical),
+    description: page.description,
+    tips: page.tips,
+  },
+  locale,
+);
 ---
 
 <BaseLayout
-  title={title}
-  description={description}
-  canonical="/tools/schulte/"
+  locale={locale}
+  title={page.title}
+  description={page.description}
+  canonical={canonical}
   schema={schema}
   speakable={['#direct-answer', '.tool-tips']}
-  breadcrumbs={toolBreadcrumbs(title, '/tools/schulte/')}
+  breadcrumbs={toolBreadcrumbs(page.title, canonical, locale)}
 >
-  <ToolPageShell
-    title={title}
-    focus="注意力广度"
-    summary="本站为轻量版：规格可选、倒计时开局、本地记录。毫秒计时与多模式请用外链专业站。"
-    tips={tips}
-    principleHref="/principles/attention-systems/"
-    principleLabel="注意力系统"
-    methodHref="/methods/offline-drills/"
-    methodLabel="离线纸笔练习"
-    planHref="/plans/7-day-reset/"
-    planLabel="7 日重置"
-  >
-    <SchulteTool />
-  </ToolPageShell>
+  <ToolDetailPage locale={locale} slug={slug} />
 </BaseLayout>

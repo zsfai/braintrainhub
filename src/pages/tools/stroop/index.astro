@@ -1,41 +1,32 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import ToolPageShell from '../../../components/ToolPageShell.astro';
-import StroopTool from '../../../components/tools/StroopTool.astro';
-import { SITE_URL } from '../../../utils/site';
-import { toolBreadcrumbs, toolSchemas } from '../../../lib/tool-page-seo';
+import ToolDetailPage from '../../../components/pages/ToolDetailPage.astro';
+import { getToolPage, toolCanonical } from '../../../lib/tool-pages';
+import { toolBreadcrumbs, toolPageUrl, toolSchemas } from '../../../lib/tool-page-seo';
 
-const title = '斯特鲁普';
-const description = '在线斯特鲁普练习：字义与颜色冲突时选择墨水颜色，训练抑制控制。';
-const tips = ['数字键 1–4 对应四色', '含一致/冲突/中性试次混合', '冲突效应 = 不一致 RT − 一致 RT，仅供参考'];
-const schema = toolSchemas({
-  toolName: '斯特鲁普训练',
-  url: `${SITE_URL}/tools/stroop/`,
-  description,
-  tips,
-});
+const locale = 'zh';
+const slug = 'stroop';
+const page = getToolPage(slug, locale);
+const canonical = toolCanonical(slug);
+const schema = toolSchemas(
+  {
+    toolName: page.toolAppName,
+    url: toolPageUrl(locale, canonical),
+    description: page.description,
+    tips: page.tips,
+  },
+  locale,
+);
 ---
 
 <BaseLayout
-  title={title}
-  description={description}
-  canonical="/tools/stroop/"
+  locale={locale}
+  title={page.title}
+  description={page.description}
+  canonical={canonical}
   schema={schema}
   speakable={['#direct-answer', '.tool-tips']}
-  breadcrumbs={toolBreadcrumbs(title, '/tools/stroop/')}
+  breadcrumbs={toolBreadcrumbs(page.title, canonical, locale)}
 >
-  <ToolPageShell
-    title={title}
-    focus="抑制控制"
-    summary="选择墨水颜色，忽略字义；结束后可看冲突效应（科普向）。"
-    tips={tips}
-    principleHref="/principles/attention-systems/"
-    principleLabel="注意力系统"
-    methodHref="/methods/attention-anchors/"
-    methodLabel="注意力锚点"
-    planHref="/plans/21-day-focus/"
-    planLabel="21 日专注重建"
-  >
-    <StroopTool />
-  </ToolPageShell>
+  <ToolDetailPage locale={locale} slug={slug} />
 </BaseLayout>

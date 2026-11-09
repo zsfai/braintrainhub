@@ -1,3 +1,6 @@
+import { pageLocaleFromDocument } from '../../i18n/locale-dom';
+import { getToolMessages } from '../../i18n/tool-messages';
+
 export function renderSessionList(container: HTMLElement, lines: string[]): void {
   if (!lines.length) {
     container.hidden = true;
@@ -7,7 +10,7 @@ export function renderSessionList(container: HTMLElement, lines: string[]): void
   container.innerHTML = '';
   const title = document.createElement('p');
   title.className = 'tool-sessions__title';
-  title.textContent = '最近记录';
+  title.textContent = getToolMessages(pageLocaleFromDocument()).recentSessions;
   container.appendChild(title);
   const ul = document.createElement('ul');
   ul.className = 'tool-sessions__list';

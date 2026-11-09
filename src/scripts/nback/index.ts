@@ -2,6 +2,8 @@ import { loadJson, updateBest, type ScoreBoard } from '../shared/storage';
 import { appendSession, formatSessionTime, loadSessions } from '../shared/sessionLog';
 import { bindKeys } from '../shared/keyboard';
 import { renderSessionList } from '../shared/stats';
+import { pageLocaleFromDocument } from '../../i18n/locale-dom';
+import { getToolMessages } from '../../i18n/tool-messages';
 
 const LETTERS = 'ABCDEFGHJKLMNPRSTU';
 const TOOL_KEY = 'nback';
@@ -38,6 +40,7 @@ function randomLetter() {
 }
 
 export function initNBack(root: HTMLElement): void {
+  const m = getToolMessages(pageLocaleFromDocument()).nback;
   const letterEl = root.querySelector<HTMLElement>('[data-letter]')!;
   const feedback = root.querySelector<HTMLElement>('[data-feedback]')!;
   const roundEl = root.querySelector<HTMLElement>('[data-round]')!;
@@ -104,10 +107,10 @@ export function initNBack(root: HTMLElement): void {
     appendSession(TOOL_KEY, { n, accuracy, hits, misses, falseAlarms, correctRejects });
     paintSessions();
     letterEl.textContent = '✓';
-    detailEl.textContent = `命中 ${hits} · 漏答 ${misses} · 虚警 ${falseAlarms} · 正确拒绝 ${correctRejects}`;
-    feedback.textContent = `结束：正确率 ${accuracy.toFixed(0)}%（${correct}/${answered}）`;
+    detailEl.textContent = m.detail(hits, misses, falseAlarms, correctRejects);
+    feedback.textContent = m.finish(accuracy, correct, answered);
     feedback.className = 'tool-feedback is-ok';
-    startBtn.textContent = '再来一组';
+    startBtn.textContent = m.again;
     startBtn.disabled = false;
   }
 
@@ -123,7 +126,7 @@ export function initNBack(root: HTMLElement): void {
     answeredThisTrial = false;
     const answerable = index >= n;
     setControls(false);
-    feedback.textContent = answerable ? '是否与 N 步之前相同？（F 相同 / J 不同）' : `预热 ${index + 1}/${n}`;
+    feedback.textContent = answerable ? m.prompt : m.warmup(index, n);
     feedback.className = 'tool-feedback';
 
     timers.push(
@@ -158,19 +161,19 @@ export function initNBack(root: HTMLElement): void {
     if (userSaysMatch === null) {
       misses += actualMatch ? 1 : 0;
       correctRejects += actualMatch ? 0 : 1;
-      feedback.textContent = actualMatch ? '漏答（应为相同）' : '超时（视为不同，正确）';
+      feedback.textContent = actualMatch ? m.timeoutMatch : m.timeoutOk;
       feedback.className = actualMatch ? 'tool-feedback is-bad' : 'tool-feedback';
       ok = !actualMatch;
     } else if (userSaysMatch === actualMatch) {
       ok = true;
       if (actualMatch) hits += 1;
       else correctRejects += 1;
-      feedback.textContent = '正确';
+      feedback.textContent = m.correct;
       feedback.className = 'tool-feedback is-ok';
     } else {
       if (userSaysMatch) falseAlarms += 1;
       else misses += actualMatch ? 1 : 0;
-      feedback.textContent = actualMatch ? '应为「相同」' : '应为「不同」';
+      feedback.textContent = actualMatch ? m.wrongMatch : m.wrongMismatch;
       feedback.className = 'tool-feedback is-bad';
     }
 
@@ -198,7 +201,7 @@ export function initNBack(root: HTMLElement): void {
     running = true;
     scoreEl.textContent = '0/0';
     detailEl.textContent = '';
-    startBtn.textContent = '进行中…';
+    startBtn.textContent = m.running;
     startBtn.disabled = true;
     paintBest();
     nextTrial();
@@ -218,5 +221,5 @@ export function initNBack(root: HTMLElement): void {
   paintBest();
   paintSessions();
   letterEl.textContent = '·';
-  feedback.textContent = '选择 N 与试次数后开始。F=相同，J=不同。';
+  feedback.textContent = m.intro;
 }

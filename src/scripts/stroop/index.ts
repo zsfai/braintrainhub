@@ -3,13 +3,8 @@ import { appendSession, formatSessionTime, loadSessions } from '../shared/sessio
 import { bindKeys, mean } from '../shared/keyboard';
 import { renderSessionList } from '../shared/stats';
 import { runCountdownAsync } from '../shared/countdown';
-
-const COLORS = [
-  { name: '红', css: '#b91c1c', key: '1' },
-  { name: '绿', css: '#047857', key: '2' },
-  { name: '蓝', css: '#1d4ed8', key: '3' },
-  { name: '黄', css: '#a16207', key: '4' },
-] as const;
+import { pageLocaleFromDocument } from '../../i18n/locale-dom';
+import { getToolMessages, type StroopColor } from '../../i18n/tool-messages';
 
 const STORAGE_KEY = 'bth:stroop';
 const TOOL_KEY = 'stroop';
@@ -23,7 +18,7 @@ type Trial = {
   inkCss: string;
 };
 
-function buildTrials(total: number): Trial[] {
+function buildTrials(total: number, colors: StroopColor[]): Trial[] {
   const trials: Trial[] = [];
   const congruentN = Math.round(total * 0.3);
   const neutralN = Math.round(total * 0.2);
@@ -38,24 +33,27 @@ function buildTrials(total: number): Trial[] {
     [bag[i], bag[j]] = [bag[j], bag[i]];
   }
   for (const type of bag) {
-    const ink = COLORS[Math.floor(Math.random() * COLORS.length)];
+    const ink = colors[Math.floor(Math.random() * colors.length)];
     if (type === 'neutral') {
       trials.push({ type, word: '+++', inkName: ink.name, inkCss: ink.css });
       continue;
     }
-    const meaning = COLORS[Math.floor(Math.random() * COLORS.length)];
     if (type === 'congruent') {
       trials.push({ type, word: ink.name, inkName: ink.name, inkCss: ink.css });
     } else {
-      let word = meaning;
-      while (word.name === ink.name) word = COLORS[Math.floor(Math.random() * COLORS.length)];
-      trials.push({ type, word: word.name, inkName: ink.name, inkCss: ink.css });
+      let meaning = colors[Math.floor(Math.random() * colors.length)];
+      while (meaning.name === ink.name) meaning = colors[Math.floor(Math.random() * colors.length)];
+      trials.push({ type, word: meaning.name, inkName: ink.name, inkCss: ink.css });
     }
   }
   return trials;
 }
 
 export function initStroop(root: HTMLElement): void {
+  const kit = getToolMessages(pageLocaleFromDocument());
+  const COLORS = kit.stroopColors;
+  const s = kit.stroop;
+
   const wordEl = root.querySelector<HTMLElement>('[data-word]')!;
   const choicesEl = root.querySelector<HTMLElement>('[data-choices]')!;
   const feedback = root.querySelector<HTMLElement>('[data-feedback]')!;
@@ -81,10 +79,10 @@ export function initStroop(root: HTMLElement): void {
   }
 
   function paintSessions() {
-    const lines = loadSessions(TOOL_KEY).map((s) => {
-      const acc = s.metrics.accuracy as number;
-      const fx = s.metrics.stroopMs as number;
-      return `${formatSessionTime(s.at)} · ${acc}% · 冲突效应 +${Math.round(fx)}ms`;
+    const lines = loadSessions(TOOL_KEY).map((row) => {
+      const acc = row.metrics.accuracy as number;
+      const fx = row.metrics.stroopMs as number;
+      return s.sessionLine(formatSessionTime(row.at), acc, fx);
     });
     if (sessionsEl) renderSessionList(sessionsEl, lines);
   }
@@ -107,7 +105,7 @@ export function initStroop(root: HTMLElement): void {
     wordEl.style.color = t.inkCss;
     shownAt = performance.now();
     scoreEl.textContent = `${correct}/${index}`;
-    feedback.textContent = '按数字键或按钮选择墨水颜色';
+    feedback.textContent = s.pickInk;
     feedback.className = 'tool-feedback';
     choicesEl.querySelectorAll('button').forEach((b) => ((b as HTMLButtonElement).disabled = false));
   }
@@ -125,12 +123,10 @@ export function initStroop(root: HTMLElement): void {
     const elapsed = performance.now() - startedAt;
     timerEl.textContent = `${(elapsed / 1000).toFixed(1)}s`;
     effectEl.textContent =
-      cong.length && inc.length
-        ? `冲突效应（科普）：不一致均 RT − 一致均 RT ≈ ${Math.round(stroopMs)} ms（越大表示字义干扰越明显）`
-        : '有效 RT 不足，无法估算冲突效应';
-    feedback.textContent = `完成：正确率 ${accuracy.toFixed(0)}%`;
+      cong.length && inc.length ? s.effect(stroopMs) : s.effectNa;
+    feedback.textContent = s.done(accuracy);
     feedback.className = 'tool-feedback is-ok';
-    startBtn.textContent = '再来一组';
+    startBtn.textContent = s.again;
     startBtn.disabled = false;
     choicesEl.querySelectorAll('button').forEach((b) => ((b as HTMLButtonElement).disabled = true));
   }
@@ -139,11 +135,11 @@ export function initStroop(root: HTMLElement): void {
     if (!playing) return;
     const t = trials[index];
     const rt = performance.now() - shownAt;
-  const ok = name === t.inkName;
+    const ok = name === t.inkName;
     rts.push({ type: t.type, rt, ok });
     if (ok) correct += 1;
     else {
-      feedback.textContent = `错误，应为「${t.inkName}」`;
+      feedback.textContent = s.wrong(t.inkName);
       feedback.className = 'tool-feedback is-bad';
     }
     index += 1;
@@ -158,17 +154,17 @@ export function initStroop(root: HTMLElement): void {
   async function start() {
     if (playing) return;
     const total = Number(lenSelect?.value) || 24;
-    trials = buildTrials(total);
+    trials = buildTrials(total, COLORS);
     index = 0;
     correct = 0;
     rts.length = 0;
     playing = true;
     startedAt = performance.now();
-    startBtn.textContent = '进行中…';
+    startBtn.textContent = s.running;
     startBtn.disabled = true;
     effectEl.textContent = '';
     renderChoices();
-    feedback.textContent = '准备…';
+    feedback.textContent = s.ready;
     await runCountdownAsync(3, (n) => {
       feedback.textContent = String(n);
     });
@@ -184,6 +180,6 @@ export function initStroop(root: HTMLElement): void {
   paintBest();
   paintSessions();
   renderChoices();
-  wordEl.textContent = '字色';
+  wordEl.textContent = s.inkWord;
   wordEl.style.color = 'var(--accent)';
 }

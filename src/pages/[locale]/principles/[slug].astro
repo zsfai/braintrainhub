@@ -1,0 +1,50 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ContentArticle from '../../../components/ContentArticle.astro';
+import { getSorted, resolveRelated, entrySlug, kindPath } from '../../../lib/content';
+import { absUrl } from '../../../lib/page-url';
+import { t } from '../../../i18n';
+import { PREFIXED_LOCALES } from '../../../i18n/routing';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const locale of PREFIXED_LOCALES) {
+    const entries = await getSorted('principles', locale);
+    for (const entry of entries) {
+      paths.push({
+        params: { locale, slug: entrySlug(entry.id) },
+        props: { entry, locale },
+      });
+    }
+  }
+  return paths;
+}
+
+const { entry, locale } = Astro.props;
+const { Content } = await render(entry);
+const related = await resolveRelated('principles', entry.data.related, locale);
+const ui = t(locale);
+const slug = entrySlug(entry.id);
+const canonical = `/principles/${slug}/`;
+---
+
+<BaseLayout
+  locale={locale}
+  title={entry.data.title}
+  description={entry.data.description}
+  canonical={canonical}
+  article
+  datePublished={entry.data.updated}
+  dateModified={entry.data.updated}
+  breadcrumbs={[
+    { name: ui.breadcrumbHome, path: '/' },
+    { name: ui.kindPrinciples, path: '/principles/' },
+    { name: entry.data.h1, path: canonical },
+  ]}
+  speakable
+>
+  <ContentArticle kind="principles" entry={entry} related={related} locale={locale}>
+    <Content />
+  </ContentArticle>
+</BaseLayout>

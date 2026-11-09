@@ -1,17 +1,26 @@
 ---
 import '../../styles/tools.css';
+import { getToolMessages } from '../../i18n/tool-messages';
+import type { Locale } from '../../i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'zh' } = Astro.props;
+const m = getToolMessages(locale);
 ---
 
 <div id="reaction-app" class="tool-shell">
   <div class="tool-toolbar">
-    <button type="button" class="btn btn--primary" data-start>开始一组（6 次）</button>
+    <button type="button" class="btn btn--primary" data-start>{m.reaction.startBlock}</button>
     <div class="tool-stats">
-      <span>最佳中位 <strong data-best>—</strong></span>
+      <span>{m.reaction.bestMedian} <strong data-best>—</strong></span>
     </div>
   </div>
   <p class="tool-stats" data-summary style="justify-content:center;"></p>
-  <div class="reaction-stage" data-stage role="button" tabindex="0" aria-label="反应时测试区域">
-    <div class="reaction-stage__label" data-label>点击或 Space 开始</div>
+  <div class="reaction-stage" data-stage role="button" tabindex="0" aria-label={m.reaction.stageAria}>
+    <div class="reaction-stage__label" data-label>{m.reaction.idle}</div>
   </div>
   <div class="tool-sessions" data-sessions hidden></div>
 </div>

@@ -1,9 +1,15 @@
 ---
-import { t } from '../i18n';
+import { localePath, t, type Locale } from '../i18n';
 import Disclaimer from './Disclaimer.astro';
 
-const ui = t('zh');
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'zh' } = Astro.props;
+const ui = t(locale);
 const year = new Date().getFullYear();
+const lp = (path: string) => localePath(locale, path);
 ---
 
 <footer class="site-footer">
@@ -13,13 +19,13 @@ const year = new Date().getFullYear();
       <p class="site-footer__tagline">{ui.tagline}</p>
       <p class="site-footer__about">{ui.footerAbout}</p>
     </div>
-    <Disclaimer />
+    <Disclaimer locale={locale} />
     <div class="site-footer__meta">
       <span>© {year} {ui.siteName}</span>
-      <a href="/faq/">常见问题</a>
-      <a href="/about/">关于与声明</a>
-      <a href="/tools/">训练工具</a>
-      <a href="/plans/">训练计划</a>
+      <a href={lp('/faq/')}>{ui.footerFaq}</a>
+      <a href={lp('/about/')}>{ui.footerAboutLink}</a>
+      <a href={lp('/tools/')}>{ui.footerTools}</a>
+      <a href={lp('/plans/')}>{ui.footerPlans}</a>
     </div>
   </div>
 </footer>

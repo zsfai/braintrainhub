@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ContentIndex from '../../../components/ContentIndex.astro';
+import { getSorted } from '../../../lib/content';
+import { collectionCopy } from '../../../i18n/collections';
+import { collectionPageSchema } from '../../../lib/seo-schemas';
+import { absUrl, entryUrl } from '../../../lib/page-url';
+import { t } from '../../../i18n';
+import { PREFIXED_LOCALES } from '../../../i18n/routing';
+
+export function getStaticPaths() {
+  return PREFIXED_LOCALES.map((locale) => ({ params: { locale }, props: { locale } }));
+}
+
+const { locale } = Astro.props;
+const entries = await getSorted('methods', locale);
+const copy = collectionCopy('methods', locale);
+const ui = t(locale);
+const schema = collectionPageSchema({
+  url: absUrl('/methods/', locale),
+  name: copy.title,
+  description: copy.description,
+  items: entries.map((e) => ({ name: e.data.title, url: entryUrl('methods', e, locale) })),
+});
+---
+
+<BaseLayout
+  locale={locale}
+  title={copy.title}
+  description={copy.description}
+  canonical="/methods/"
+  speakable
+  schema={schema}
+  breadcrumbs={[
+    { name: ui.breadcrumbHome, path: '/' },
+    { name: copy.title, path: '/methods/' },
+  ]}
+>
+  <ContentIndex kind="methods" entries={entries} lead={copy.lead} locale={locale} />
+</BaseLayout>

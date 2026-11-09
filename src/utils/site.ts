@@ -1,5 +1,5 @@
-export const SITE_URL = 'https://braintrainhub.com';
-export const SITE_NAME = 'BrainTrainHub';
+export const SITE_URL = 'https://braintrainlab.com';
+export const SITE_NAME = 'BrainTrainLab';
 export const SITE_TAGLINE = '认知训练与专注力重建';
 export const OG_IMAGE = `${SITE_URL}/og.svg`;
 export const THEME_COLOR = '#0F766E';
@@ -9,23 +9,23 @@ export type BreadcrumbItem = {
   path: string;
 };
 
-export function organizationSchema() {
+export function organizationSchema(description: string) {
   return {
     '@type': 'Organization',
     name: SITE_NAME,
     url: SITE_URL,
-    description: '认知训练工具、原理科普与可执行专注力重建计划。内容仅供科普，不构成医疗建议。',
+    description,
     logo: `${SITE_URL}/favicon.svg`,
   };
 }
 
-export function websiteSchema() {
+export function websiteSchema(inLanguage = 'zh-CN', description = SITE_TAGLINE) {
   return {
     '@type': 'WebSite',
     name: SITE_NAME,
     url: SITE_URL,
-    inLanguage: 'zh-CN',
-    description: SITE_TAGLINE,
+    inLanguage,
+    description,
   };
 }
 
@@ -47,13 +47,14 @@ export function articleSchema(opts: {
   url: string;
   datePublished?: string;
   dateModified?: string;
+  inLanguage?: string;
 }) {
   return {
     '@type': 'Article',
     headline: opts.title,
     description: opts.description,
     url: opts.url,
-    inLanguage: 'zh-CN',
+    inLanguage: opts.inLanguage ?? 'zh-CN',
     author: {
       '@type': 'Organization',
       name: SITE_NAME,
@@ -93,15 +94,18 @@ export function webApplicationSchema(opts: {
   name: string;
   url: string;
   description: string;
+  locale?: string;
 }) {
+  const lang = opts.locale ?? 'zh';
+  const currency = lang === 'zh' ? 'CNY' : 'USD';
   return {
     '@type': 'WebApplication',
     name: opts.name,
     url: opts.url,
     applicationCategory: 'EducationalApplication',
     operatingSystem: 'Web Browser',
-    inLanguage: 'zh-CN',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
+    inLanguage: lang === 'zh' ? 'zh-CN' : lang,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: currency },
     description: opts.description,
   };
 }

@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ToolsIndexPage from '../../../components/pages/ToolsIndexPage.astro';
+import { collectionCopy } from '../../../i18n/collections';
+import { collectionPageSchema } from '../../../lib/seo-schemas';
+import { absUrl } from '../../../lib/page-url';
+import { getTools } from '../../../lib/tools-i18n';
+import { t } from '../../../i18n';
+import { PREFIXED_LOCALES } from '../../../i18n/routing';
+
+export function getStaticPaths() {
+  return PREFIXED_LOCALES.map((locale) => ({ params: { locale }, props: { locale } }));
+}
+
+const { locale } = Astro.props;
+const copy = collectionCopy('tools', locale);
+const ui = t(locale);
+const schema = collectionPageSchema({
+  url: absUrl('/tools/', locale),
+  name: copy.title,
+  description: copy.description,
+  items: getTools(locale).map((tool) => ({ name: tool.title, url: absUrl(tool.path, locale) })),
+});
+---
+
+<BaseLayout
+  locale={locale}
+  title={copy.title}
+  description={copy.description}
+  canonical="/tools/"
+  speakable
+  schema={schema}
+  breadcrumbs={[
+    { name: ui.breadcrumbHome, path: '/' },
+    { name: copy.title, path: '/tools/' },
+  ]}
+>
+  <ToolsIndexPage locale={locale} />
+</BaseLayout>

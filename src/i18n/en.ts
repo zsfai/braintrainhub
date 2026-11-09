@@ -1,0 +1,123 @@
+import type { UiDict } from './types';
+
+export const en: UiDict = {
+  siteName: 'BrainTrainLab',
+  tagline: 'Cognitive training & focus recovery',
+  nav: [
+    { href: '/tools/', label: 'Tools' },
+    { href: '/principles/', label: 'Principles' },
+    { href: '/methods/', label: 'Methods' },
+    { href: '/plans/', label: 'Plans' },
+    { href: '/about/', label: 'About' },
+  ],
+  ctaTrain: 'Start training',
+  ctaPrinciples: 'Learn principles',
+  footerAbout:
+    'BrainTrainLab offers cognitive training tools, methods, and science-based explainers to rebuild focus and daily rhythm.',
+  breadcrumbHome: 'Home',
+  level: { beginner: 'Beginner', intermediate: 'Intermediate', advanced: 'Advanced' },
+  related: 'Related',
+  startTraining: 'Practice',
+  bestScore: 'Best',
+  lastScore: 'Last',
+  reset: 'Reset',
+  start: 'Start',
+  pause: 'Pause',
+  resume: 'Resume',
+  next: 'Next round',
+  correct: 'Correct',
+  wrong: 'Wrong',
+  ready: 'Ready',
+  round: 'Round',
+  time: 'Time',
+  accuracy: 'Accuracy',
+  settings: 'Settings',
+  directAnswerLabel: 'In brief',
+  skipToContent: 'Skip to main content',
+  menu: 'Menu',
+  footerFaq: 'FAQ',
+  footerAboutLink: 'About',
+  footerTools: 'Tools',
+  footerPlans: 'Plans',
+  navAbout: 'About',
+  kindPrinciples: 'Principles',
+  kindMethods: 'Methods',
+  kindPlans: 'Plans',
+  kindTools: 'Tools',
+  toolHowTo: 'How to use this tool',
+  toolPrinciple: 'Principle',
+  toolMethod: 'Method',
+  toolPlan: 'Plan',
+  viewAllPrinciples: 'All principles',
+  viewAllFaq: 'All FAQ',
+  relatedToolsTitle: 'Related tools',
+  updatedOn: 'Updated',
+  home: {
+    title: 'BrainTrainLab',
+    metaDescription:
+      'Cognitive training tools, explainers, and actionable plans to rebuild focus after short-form video overload.',
+    directAnswer:
+      'BrainTrainLab provides browser-based cognitive drills, science explainers, and training plans for focus and rhythm—not medical care.',
+    heroLead:
+      'Attention lost to endless clips can be rebuilt with practice and rhythm. Tools, principles, and plans—education only, no medical claims.',
+    sectionTrain: 'Start with tools',
+    sectionTrainLead:
+      'Five in-browser drills covering attention, reaction, working memory, inhibition, and focus sessions.',
+    sectionPrinciples: 'Understand first',
+    sectionPrinciplesLead:
+      'Learn attention systems, reward loops, and cognitive load so you choose drills with intent.',
+    sectionPlans: 'Follow a plan',
+    sectionPlansLead:
+      '7-day reset, 21-day focus rebuild, or 4-week blend—short and steady beats random intensity.',
+    sectionFaq: 'FAQ',
+    methodsLink: 'Methods',
+    aboutLink: 'About',
+    faqLink: 'FAQ',
+  },
+  about: {
+    title: 'About BrainTrainLab',
+    metaDescription: 'Mission, boundaries, and non-medical disclaimer.',
+    directAnswer:
+      'BrainTrainLab bundles tools, methods, and principle explainers for focus and rhythm. See what we do and do not offer below.',
+    weDo: 'What we do',
+    weDont: 'What we do not do',
+    principles: 'Content principles',
+    weDoItems: [
+      'In-browser cognitive drills (attention, working memory, inhibition, rhythm)',
+      'Behavioral and cognitive science explainers',
+      'Environment, habit, and schedule methods',
+      'Training plans that connect the above',
+    ],
+    weDontItems: [
+      'No diagnosis, psychotherapy, or medical treatment claims',
+      'No prescriptions or clinical scale interpretation',
+      'No hype about “curing” or “rewiring” the brain',
+    ],
+    principlesBody:
+      'We use wording like cognitive training, attention practice, habit rebuilding, and education. For sleep, motivation, and attention we discuss self-management only. If you are in persistent distress, seek qualified professional help.',
+  },
+  faq: {
+    title: 'FAQ',
+    metaDescription: 'Tools, local scores, boundaries, and how to start plans.',
+    directAnswer: 'Quick index of tools, storage, boundaries, and getting started—answers below.',
+  },
+  toolsIndex: {
+    title: 'Training tools',
+    metaDescription: 'Schulte table, reaction time, N-Back, Stroop, and focus timer.',
+    lead: 'Pick one session you can finish today. Scores stay in your browser; reset anytime.',
+  },
+  notFound: {
+    title: 'Page not found',
+    description: 'This page is missing or moved. Try home, tools, or FAQ.',
+    heading: 'Page not found',
+    try: 'Try',
+    home: 'Home',
+  },
+  disclaimer: {
+    label: 'Educational notice',
+    scope:
+      'Content is for cognitive training and behavioral education only—not medical, psychological, or diagnostic advice.',
+    help: 'If you are struggling persistently, seek help from a qualified professional.',
+    helpPrefix: 'If you need help',
+  },
+};

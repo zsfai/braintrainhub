@@ -1,19 +1,25 @@
 ---
+import { localePath, type Locale } from '../i18n';
 import type { BreadcrumbItem } from '../utils/site';
 
 interface Props {
   items: BreadcrumbItem[];
+  locale?: Locale;
 }
 
-const { items } = Astro.props;
+const { items, locale = 'zh' } = Astro.props;
 ---
 
-<nav aria-label="面包屑">
+<nav aria-label="Breadcrumb">
   <ol class="breadcrumb">
     {
       items.map((item, index) => (
         <li>
-          {index < items.length - 1 ? <a href={item.path}>{item.name}</a> : <span aria-current="page">{item.name}</span>}
+          {index < items.length - 1 ? (
+            <a href={localePath(locale, item.path)}>{item.name}</a>
+          ) : (
+            <span aria-current="page">{item.name}</span>
+          )}
         </li>
       ))
     }

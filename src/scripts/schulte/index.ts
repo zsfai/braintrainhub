@@ -3,6 +3,8 @@ import { appendSession, formatSessionTime, loadSessions } from '../shared/sessio
 import { runCountdownAsync } from '../shared/countdown';
 import { bindKeys } from '../shared/keyboard';
 import { renderSessionList } from '../shared/stats';
+import { pageLocaleFromDocument } from '../../i18n/locale-dom';
+import { getToolMessages } from '../../i18n/tool-messages';
 
 const TOOL_KEY = 'schulte';
 
@@ -20,6 +22,7 @@ function formatMs(ms: number): string {
 }
 
 export function initSchulte(root: HTMLElement): void {
+  const m = getToolMessages(pageLocaleFromDocument()).schulte;
   const grid = root.querySelector<HTMLElement>('[data-grid]')!;
   const targetEl = root.querySelector<HTMLElement>('[data-target]')!;
   const timerEl = root.querySelector<HTMLElement>('[data-timer]')!;
@@ -99,9 +102,9 @@ export function initSchulte(root: HTMLElement): void {
     paintScores();
     appendSession(TOOL_KEY, { size, timeMs: elapsed, errors });
     paintSessions();
-    feedback.textContent = `完成！用时 ${formatMs(elapsed)}，错误 ${errors} 次。需要毫秒级计时与进阶模式？见上方专业舒尔特链接。`;
+    feedback.textContent = m.complete(formatMs(elapsed), errors);
     feedback.className = 'tool-feedback is-ok';
-    startBtn.textContent = '再来一轮';
+    startBtn.textContent = m.again;
     startBtn.disabled = false;
   }
 
@@ -121,7 +124,7 @@ export function initSchulte(root: HTMLElement): void {
       errorsEl.textContent = String(errors);
       btn.classList.add('is-miss');
       setTimeout(() => btn.classList.remove('is-miss'), 220);
-      feedback.textContent = `请找 ${next}`;
+      feedback.textContent = m.find(next);
       feedback.className = 'tool-feedback is-bad';
     }
   }
@@ -133,8 +136,8 @@ export function initSchulte(root: HTMLElement): void {
     playing = true;
     setClicksEnabled(false);
     startBtn.disabled = true;
-    startBtn.textContent = '准备…';
-    feedback.textContent = '注视网格中心，用余光定位数字。先求少错，再求更快。';
+    startBtn.textContent = m.preparing;
+    feedback.textContent = m.prep;
     feedback.className = 'tool-feedback';
     countdownEl.textContent = '3';
     await runCountdownAsync(3, (n) => {
@@ -142,7 +145,7 @@ export function initSchulte(root: HTMLElement): void {
     });
     countdownEl.textContent = '';
     startedAt = performance.now();
-    startBtn.textContent = '进行中…';
+    startBtn.textContent = m.inProgress;
     setClicksEnabled(true);
     cancelAnimationFrame(raf);
     raf = requestAnimationFrame(tick);

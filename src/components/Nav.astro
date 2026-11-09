@@ -1,40 +1,73 @@
 ---
-import { t } from '../i18n';
+import { LOCALES, LOCALE_LABELS, localeHreflang, localePath, t, type Locale } from '../i18n';
 
 interface Props {
   canonical?: string;
+  locale?: Locale;
 }
 
-const { canonical = '/' } = Astro.props;
-const ui = t('zh');
+const { canonical = '/', locale = 'zh' } = Astro.props;
+const ui = t(locale);
+const homeHref = localePath(locale, '/');
 
 function isCurrent(href: string) {
-  if (href === '/') return canonical === '/' || canonical === '';
+  const path = localePath(locale, href);
+  if (path === homeHref) return canonical === '/' || canonical === '';
   return canonical === href || canonical.startsWith(href);
 }
 ---
 
 <header class="site-nav" id="site-nav">
   <div class="site-nav__inner">
-    <a class="site-nav__logo" href="/">
+    <a class="site-nav__logo" href={homeHref}>
       <span class="site-nav__logo-text">
         <span class="site-nav__logo-mark">{ui.siteName}</span>
         <span class="site-nav__logo-tagline">{ui.tagline}</span>
       </span>
     </a>
     <button class="site-nav__toggle" type="button" aria-expanded="false" aria-controls="site-nav-links" id="nav-toggle">
-      菜单
+      {ui.menu}
     </button>
     <ul class="site-nav__links" id="site-nav-links">
       {
         ui.nav.map((item) => (
           <li>
-            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+            <a
+              href={localePath(locale, item.href)}
+              aria-current={isCurrent(item.href) ? 'page' : undefined}
+            >
               {item.label}
             </a>
           </li>
         ))
       }
+      <li class="site-nav__lang-item">
+        <details class="site-nav__lang">
+          <summary class="site-nav__lang-trigger">
+            <span>{LOCALE_LABELS[locale]}</span>
+            <svg class="site-nav__lang-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <path d="M6 9l6 6 6-6"></path>
+            </svg>
+          </summary>
+          <ul class="site-nav__lang-menu">
+            {
+              LOCALES.map((l) => (
+                <li>
+                  {l === locale ? (
+                    <span class="site-nav__lang-current" aria-current="true">
+                      {LOCALE_LABELS[l]}
+                    </span>
+                  ) : (
+                    <a href={localePath(l, canonical)} hreflang={localeHreflang(l)}>
+                      {LOCALE_LABELS[l]}
+                    </a>
+                  )}
+                </li>
+              ))
+            }
+          </ul>
+        </details>
+      </li>
     </ul>
   </div>
 </header>
@@ -56,5 +89,11 @@ function isCurrent(href: string) {
 
   links?.querySelectorAll('a').forEach((link) => {
     link.addEventListener('click', closeNav);
+  });
+
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll('.site-nav__lang[open]').forEach((el) => {
+      if (!el.contains(e.target as Node)) el.removeAttribute('open');
+    });
   });
 </script>

@@ -1,48 +1,57 @@
 ---
 import '../../styles/tools.css';
+import { getToolMessages } from '../../i18n/tool-messages';
+import type { Locale } from '../../i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'zh' } = Astro.props;
+const m = getToolMessages(locale);
 ---
 
 <div id="focus-timer-app" class="tool-shell">
   <div class="focus-settings">
     <label>
-      专注（分钟）
+      {m.focus.focusMin}
       <input type="number" min="1" max="120" data-focus-min value="25" />
     </label>
     <label>
-      休息（分钟）
+      {m.focus.breakMin}
       <input type="number" min="1" max="60" data-break-min value="5" />
     </label>
     <label>
-      长休息（分钟）
-      <input type="number" min="5" max="60" data-long-break-min value="15" />
+      {m.focus.longBreakMin}
+      <input type="number" min="1" max="60" data-long-break-min value="15" />
     </label>
     <label>
-      循环次数
+      {m.focus.cycles}
       <input type="number" min="1" max="12" data-cycles value="4" />
     </label>
     <label class="focus-check">
       <input type="checkbox" data-sound checked />
-      阶段提示音
+      {m.focus.sound}
     </label>
     <label class="focus-check">
       <input type="checkbox" data-long-break />
-      每 4 段专注加长休息
+      {m.focus.longEvery4}
     </label>
   </div>
   <div class="tool-toolbar">
     <div class="btn-row">
-      <button type="button" class="btn btn--primary" data-start>开始</button>
-      <button type="button" class="btn btn--ghost" data-pause>暂停</button>
-      <button type="button" class="btn btn--ghost" data-reset>重置</button>
+      <button type="button" class="btn btn--primary" data-start>{m.focus.start}</button>
+      <button type="button" class="btn btn--ghost" data-pause>{m.focus.pause}</button>
+      <button type="button" class="btn btn--ghost" data-reset>{m.focus.reset}</button>
     </div>
     <div class="tool-stats">
-      <span>阶段 <strong data-phase>专注中</strong></span>
-      <span>循环 <strong data-cycle>1 / 4</strong></span>
+      <span>{m.focus.phaseStat} <strong data-phase>{m.focus.phaseFocus}</strong></span>
+      <span>{m.focus.cycleStat} <strong data-cycle>{m.focus.cycleOf(1, 4)}</strong></span>
     </div>
   </div>
   <div class="focus-timer-display">
     <div class="focus-timer-display__time" data-time>25:00</div>
-    <div class="focus-timer-display__phase">倒计时同步到浏览器标签标题</div>
+    <div class="focus-timer-display__phase">{m.focus.tabHint}</div>
   </div>
   <p class="tool-feedback" data-feedback></p>
 </div>

@@ -3,7 +3,7 @@ import type { FaqItem } from '../lib/seo-schemas';
 /** 全站共用 FAQ（首页摘要 + /faq/ 详情），便于 SEO/GEO 一致 */
 export const SITE_FAQS: FaqItem[] = [
   {
-    question: 'BrainTrainHub 是医疗或心理治疗网站吗？',
+    question: 'BrainTrainLab 是医疗或心理治疗网站吗？',
     answer:
       '不是。本站提供认知训练工具、行为与认知科学科普及可执行习惯计划，不构成医疗、心理咨询或诊断建议。若有持续困扰，请寻求合格专业人士帮助。',
   },

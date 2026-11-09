@@ -2,33 +2,34 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ContentIndex from '../../components/ContentIndex.astro';
 import { getSorted } from '../../lib/content';
-import { collectionPageSchema, absUrl } from '../../lib/seo-schemas';
+import { collectionCopy } from '../../i18n/collections';
+import { collectionPageSchema } from '../../lib/seo-schemas';
+import { absUrl, entryUrl } from '../../lib/page-url';
+import { t } from '../../i18n';
 
-const entries = await getSorted('plans');
-const title = '训练计划';
-const description = '7 日重置、21 日专注重建与四周综合计划，把工具、方法与原理串成可执行路径。';
+const locale = 'zh';
+const entries = await getSorted('plans', locale);
+const copy = collectionCopy('plans', locale);
+const ui = t(locale);
 const schema = collectionPageSchema({
-  url: absUrl('/plans/'),
-  name: title,
-  description,
-  items: entries.map((e) => ({ name: e.data.title, url: absUrl(`/plans/${e.id}/`) })),
+  url: absUrl('/plans/', locale),
+  name: copy.title,
+  description: copy.description,
+  items: entries.map((e) => ({ name: e.data.title, url: entryUrl('plans', e, locale) })),
 });
 ---
 
 <BaseLayout
-  title={title}
-  description={description}
+  locale={locale}
+  title={copy.title}
+  description={copy.description}
   canonical="/plans/"
   speakable
   schema={schema}
   breadcrumbs={[
-    { name: '首页', path: '/' },
-    { name: '训练计划', path: '/plans/' },
+    { name: ui.breadcrumbHome, path: '/' },
+    { name: copy.title, path: '/plans/' },
   ]}
 >
-  <ContentIndex
-    kind="plans"
-    entries={entries}
-    lead="选一个符合当前状态的计划开始。短而规律，胜过偶发猛练。"
-  />
+  <ContentIndex kind="plans" entries={entries} lead={copy.lead} locale={locale} />
 </BaseLayout>

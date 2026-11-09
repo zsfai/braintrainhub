@@ -1,0 +1,40 @@
+---
+import ToolPageShell from '../ToolPageShell.astro';
+import SchulteTool from '../tools/SchulteTool.astro';
+import ReactionTool from '../tools/ReactionTool.astro';
+import NBackTool from '../tools/NBackTool.astro';
+import StroopTool from '../tools/StroopTool.astro';
+import FocusTimerTool from '../tools/FocusTimerTool.astro';
+import { getToolPage, toolCanonical, type ToolSlug } from '../../lib/tool-pages';
+import type { Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+  slug: ToolSlug;
+}
+
+const { locale, slug } = Astro.props;
+const page = getToolPage(slug, locale);
+const toolPath = toolCanonical(slug);
+---
+
+<ToolPageShell
+  locale={locale}
+  title={page.title}
+  focus={page.focus}
+  summary={page.summary}
+  tips={page.tips}
+  principleHref={page.principleHref}
+  principleLabel={page.principleLabel}
+  methodHref={page.methodHref}
+  methodLabel={page.methodLabel}
+  planHref={page.planHref}
+  planLabel={page.planLabel}
+  toolPath={toolPath}
+>
+  {slug === 'schulte' && <SchulteTool locale={locale} />}
+  {slug === 'reaction' && <ReactionTool locale={locale} />}
+  {slug === 'n-back' && <NBackTool locale={locale} />}
+  {slug === 'stroop' && <StroopTool locale={locale} />}
+  {slug === 'focus-timer' && <FocusTimerTool locale={locale} />}
+</ToolPageShell>

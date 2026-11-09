@@ -3,11 +3,19 @@ import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import JsonLd from '../components/seo/JsonLd.astro';
-import { htmlLang } from '../i18n';
+import {
+  LOCALES,
+  htmlLang,
+  localeHreflang,
+  localeOg,
+  localePath,
+  siteTagline,
+  t,
+  type Locale,
+} from '../i18n';
 import {
   SITE_URL,
   SITE_NAME,
-  SITE_TAGLINE,
   OG_IMAGE,
   THEME_COLOR,
   articleSchema,
@@ -22,6 +30,7 @@ interface Props {
   title: string;
   description: string;
   canonical?: string;
+  locale?: Locale;
   schema?: Record<string, unknown> | Record<string, unknown>[];
   breadcrumbs?: BreadcrumbItem[];
   article?: boolean;
@@ -36,6 +45,7 @@ const {
   title,
   description,
   canonical = '/',
+  locale = 'zh',
   schema,
   breadcrumbs,
   article = false,
@@ -46,15 +56,25 @@ const {
   speakable,
 } = Astro.props;
 
-const pagePath = canonical.startsWith('/') ? canonical : `/${canonical}`;
+const ui = t(locale);
+const pagePath = localePath(locale, canonical);
 const pageUrl = `${SITE_URL}${pagePath}`;
 const fullTitle = title.includes(SITE_NAME) ? title : `${title} · ${SITE_NAME}`;
-const isHome = pagePath === '/' || pagePath === '';
+const isHome = canonical === '/' || canonical === '';
+const tagline = siteTagline(locale);
+const orgDescription = ui.home.directAnswer;
 
 const extraSchemas: Record<string, unknown>[] = [];
 
 if (breadcrumbs?.length) {
-  extraSchemas.push(breadcrumbSchema(breadcrumbs));
+  extraSchemas.push(
+    breadcrumbSchema(
+      breadcrumbs.map((item) => ({
+        ...item,
+        path: item.path.startsWith('http') ? item.path : localePath(locale, item.path),
+      })),
+    ),
+  );
 }
 
 if (article) {
@@ -65,6 +85,7 @@ if (article) {
       url: pageUrl,
       datePublished,
       dateModified,
+      inLanguage: localeHreflang(locale),
     }),
   );
 }
@@ -92,11 +113,17 @@ if (speakableSelectors) {
 }
 
 const pageSchema = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
-const allSchema = [organizationSchema(), websiteSchema(), ...extraSchemas, ...pageSchema];
+const allSchema = [
+  organizationSchema(orgDescription),
+  websiteSchema(localeHreflang(locale), tagline),
+  ...extraSchemas,
+  ...pageSchema,
+];
+const xDefaultUrl = `${SITE_URL}${localePath('zh', canonical)}`;
 ---
 
 <!doctype html>
-<html lang={htmlLang('zh')}>
+<html lang={htmlLang(locale)}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -109,8 +136,12 @@ const allSchema = [organizationSchema(), websiteSchema(), ...extraSchemas, ...pa
     <meta name="author" content={SITE_NAME} />
     <meta name="theme-color" content={THEME_COLOR} />
     <link rel="canonical" href={pageUrl} />
-    <link rel="alternate" hreflang="zh-CN" href={pageUrl} />
-    <link rel="alternate" hreflang="x-default" href={pageUrl} />
+    {
+      LOCALES.map((l) => (
+        <link rel="alternate" hreflang={localeHreflang(l)} href={`${SITE_URL}${localePath(l, canonical)}`} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={xDefaultUrl} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta property="og:title" content={fullTitle} />
@@ -119,21 +150,26 @@ const allSchema = [organizationSchema(), websiteSchema(), ...extraSchemas, ...pa
     <meta property="og:url" content={pageUrl} />
     <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale" content={localeOg(locale)} />
+    {
+      LOCALES.filter((l) => l !== locale).map((l) => (
+        <meta property="og:locale:alternate" content={localeOg(l)} />
+      ))
+    }
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
-    <meta property="og:image:alt" content={`${SITE_NAME} — ${SITE_TAGLINE}`} />
-    <meta name="twitter:image:alt" content={`${SITE_NAME} — ${SITE_TAGLINE}`} />
+    <meta property="og:image:alt" content={`${SITE_NAME} — ${tagline}`} />
+    <meta name="twitter:image:alt" content={`${SITE_NAME} — ${tagline}`} />
     <JsonLd data={allSchema} />
   </head>
   <body>
-    <a class="skip-link" href="#main-content">跳到主内容</a>
-    <Nav canonical={pagePath} />
+    <a class="skip-link" href="#main-content">{ui.skipToContent}</a>
+    <Nav locale={locale} canonical={canonical} />
     <main id="main-content">
       <slot />
     </main>
-    <Footer />
+    <Footer locale={locale} />
   </body>
 </html>

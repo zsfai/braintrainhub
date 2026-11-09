@@ -1,5 +1,15 @@
 ---
 import '../../styles/tools.css';
+import { getToolMessages } from '../../i18n/tool-messages';
+import { t, type Locale } from '../../i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'zh' } = Astro.props;
+const ui = t(locale);
+const m = getToolMessages(locale);
 ---
 
 <div id="nback-app" class="tool-shell">
@@ -14,26 +24,26 @@ import '../../styles/tools.css';
         </select>
       </label>
       <label>
-        试次
+        {m.nback.trials}
         <select class="tool-select" data-len>
           <option value="16">16</option>
           <option value="20" selected>20</option>
           <option value="30">30</option>
         </select>
       </label>
-      <button type="button" class="btn btn--primary" data-start>开始</button>
+      <button type="button" class="btn btn--primary" data-start>{ui.start}</button>
     </div>
     <div class="tool-stats">
-      <span>进度 <strong data-round>0</strong></span>
-      <span>得分 <strong data-score>0/0</strong></span>
-      <span>最佳 <strong data-best>—</strong></span>
+      <span>{m.nback.progress} <strong data-round>0</strong></span>
+      <span>{m.nback.score} <strong data-score>0/0</strong></span>
+      <span>{ui.bestScore} <strong data-best>—</strong></span>
     </div>
   </div>
   <div class="nback-stage">
     <div class="nback-letter" data-letter>·</div>
     <div class="nback-actions">
-      <button type="button" class="btn btn--primary" data-match disabled>相同 (F)</button>
-      <button type="button" class="btn btn--ghost" data-mismatch disabled>不同 (J)</button>
+      <button type="button" class="btn btn--primary" data-match disabled>{m.nback.match}</button>
+      <button type="button" class="btn btn--ghost" data-mismatch disabled>{m.nback.mismatch}</button>
     </div>
   </div>
   <p class="tool-stats" data-detail style="justify-content:center;margin-top:0.5rem;"></p>

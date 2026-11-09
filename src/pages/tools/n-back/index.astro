@@ -1,45 +1,32 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import ToolPageShell from '../../../components/ToolPageShell.astro';
-import NBackTool from '../../../components/tools/NBackTool.astro';
-import { SITE_URL } from '../../../utils/site';
-import { toolBreadcrumbs, toolSchemas } from '../../../lib/tool-page-seo';
+import ToolDetailPage from '../../../components/pages/ToolDetailPage.astro';
+import { getToolPage, toolCanonical } from '../../../lib/tool-pages';
+import { toolBreadcrumbs, toolPageUrl, toolSchemas } from '../../../lib/tool-page-seo';
 
-const title = 'N-Back 工作记忆';
-const description = '在线 N-Back 训练：判断当前字母是否与 N 步之前相同，练习工作记忆更新。';
-const tips = [
-  '试次序列约 30% 为「相同」，更接近常见范式',
-  '超时未答会记为错误',
-  '看命中/漏答/虚警拆分，理解自己的工作记忆策略',
-];
-const schema = toolSchemas({
-  toolName: 'N-Back 工作记忆训练',
-  url: `${SITE_URL}/tools/n-back/`,
-  description,
-  tips,
-});
+const locale = 'zh';
+const slug = 'n-back';
+const page = getToolPage(slug, locale);
+const canonical = toolCanonical(slug);
+const schema = toolSchemas(
+  {
+    toolName: page.toolAppName,
+    url: toolPageUrl(locale, canonical),
+    description: page.description,
+    tips: page.tips,
+  },
+  locale,
+);
 ---
 
 <BaseLayout
-  title={title}
-  description={description}
-  canonical="/tools/n-back/"
+  locale={locale}
+  title={page.title}
+  description={page.description}
+  canonical={canonical}
   schema={schema}
   speakable={['#direct-answer', '.tool-tips']}
-  breadcrumbs={toolBreadcrumbs(title, '/tools/n-back/')}
+  breadcrumbs={toolBreadcrumbs(page.title, canonical, locale)}
 >
-  <ToolPageShell
-    title={title}
-    focus="工作记忆"
-    summary="标准节奏呈现字母，判断是否与 N 步前相同。F=相同，J=不同。"
-    tips={tips}
-    principleHref="/principles/working-memory-basics/"
-    principleLabel="工作记忆基础"
-    methodHref="/methods/attention-anchors/"
-    methodLabel="注意力锚点"
-    planHref="/plans/21-day-focus/"
-    planLabel="21 日专注重建"
-  >
-    <NBackTool />
-  </ToolPageShell>
+  <ToolDetailPage locale={locale} slug={slug} />
 </BaseLayout>

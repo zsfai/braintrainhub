@@ -3,13 +3,13 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://braintrainhub.com',
+  site: 'https://braintrainlab.com',
   integrations: [
     sitemap({
       changefreq: 'weekly',
       priority: 0.7,
       serialize(item) {
-        if (item.url === 'https://braintrainhub.com/') {
+        if (item.url === 'https://braintrainlab.com/') {
           return { ...item, priority: 1.0, changefreq: 'daily' };
         }
         if (item.url.includes('/faq/')) {

@@ -1,28 +1,38 @@
 ---
 import '../../styles/tools.css';
+import { getToolMessages } from '../../i18n/tool-messages';
+import { t, type Locale } from '../../i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'zh' } = Astro.props;
+const ui = t(locale);
+const m = getToolMessages(locale);
 ---
 
 <div id="stroop-app" class="tool-shell">
   <div class="tool-toolbar">
     <div class="btn-row">
       <label>
-        试次
+        {m.stroop.trials}
         <select class="tool-select" data-len>
           <option value="12">12</option>
           <option value="24" selected>24</option>
           <option value="36">36</option>
         </select>
       </label>
-      <button type="button" class="btn btn--primary" data-start>开始</button>
+      <button type="button" class="btn btn--primary" data-start>{ui.start}</button>
     </div>
     <div class="tool-stats">
-      <span>得分 <strong data-score>0/0</strong></span>
-      <span>用时 <strong data-timer>0.0s</strong></span>
-      <span>最佳正确率 <strong data-best>—</strong></span>
+      <span>{m.nback.score} <strong data-score>0/0</strong></span>
+      <span>{m.stroop.time} <strong data-timer>0.0s</strong></span>
+      <span>{m.stroop.bestAccuracy} <strong data-best>—</strong></span>
     </div>
   </div>
   <div class="stroop-stage">
-    <div class="stroop-word" data-word>字色</div>
+    <div class="stroop-word" data-word>{m.stroop.inkWord}</div>
     <div class="stroop-choices" data-choices></div>
   </div>
   <p class="tool-stats" data-effect style="justify-content:center;font-size:0.9rem;"></p>

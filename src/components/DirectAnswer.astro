@@ -1,12 +1,16 @@
 ---
+import { t, type Locale } from '../i18n';
+
 interface Props {
   text: string;
+  locale?: Locale;
 }
 
-const { text } = Astro.props;
+const { text, locale = 'zh' } = Astro.props;
+const ui = t(locale);
 ---
 
 <section id="direct-answer" class="direct-answer" data-geo="direct-answer" itemprop="abstract">
-  <p class="direct-answer__label">一句话摘要</p>
+  <p class="direct-answer__label">{ui.directAnswerLabel}</p>
   <p class="direct-answer__text">{text}</p>
 </section>

@@ -2,33 +2,34 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ContentIndex from '../../components/ContentIndex.astro';
 import { getSorted } from '../../lib/content';
-import { collectionPageSchema, absUrl } from '../../lib/seo-schemas';
+import { collectionCopy } from '../../i18n/collections';
+import { collectionPageSchema } from '../../lib/seo-schemas';
+import { absUrl, entryUrl } from '../../lib/page-url';
+import { t } from '../../i18n';
 
-const entries = await getSorted('principles');
-const title = '原理科普';
-const description = '用专业科普语言理解注意力、奖赏回路、认知负荷、工作记忆与节律——不做医疗承诺。';
+const locale = 'zh';
+const entries = await getSorted('principles', locale);
+const copy = collectionCopy('principles', locale);
+const ui = t(locale);
 const schema = collectionPageSchema({
-  url: absUrl('/principles/'),
-  name: title,
-  description,
-  items: entries.map((e) => ({ name: e.data.title, url: absUrl(`/principles/${e.id}/`) })),
+  url: absUrl('/principles/', locale),
+  name: copy.title,
+  description: copy.description,
+  items: entries.map((e) => ({ name: e.data.title, url: entryUrl('principles', e, locale) })),
 });
 ---
 
 <BaseLayout
-  title={title}
-  description={description}
+  locale={locale}
+  title={copy.title}
+  description={copy.description}
   canonical="/principles/"
   speakable
   schema={schema}
   breadcrumbs={[
-    { name: '首页', path: '/' },
-    { name: '原理科普', path: '/principles/' },
+    { name: ui.breadcrumbHome, path: '/' },
+    { name: copy.title, path: '/principles/' },
   ]}
 >
-  <ContentIndex
-    kind="principles"
-    entries={entries}
-    lead="理解机制，才能选对练习。以下文章只做认知与行为科普，帮助你建立正确心智模型。"
-  />
+  <ContentIndex kind="principles" entries={entries} lead={copy.lead} locale={locale} />
 </BaseLayout>

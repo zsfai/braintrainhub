@@ -1,0 +1,123 @@
+import type { UiDict } from './types';
+
+export const es: UiDict = {
+  siteName: 'BrainTrainLab',
+  tagline: 'Entrenamiento cognitivo y recuperación del foco',
+  nav: [
+    { href: '/tools/', label: 'Herramientas' },
+    { href: '/principles/', label: 'Principios' },
+    { href: '/methods/', label: 'Métodos' },
+    { href: '/plans/', label: 'Planes' },
+    { href: '/about/', label: 'Acerca de' },
+  ],
+  ctaTrain: 'Empezar',
+  ctaPrinciples: 'Ver principios',
+  footerAbout:
+    'BrainTrainLab ofrece herramientas de entrenamiento cognitivo, métodos y divulgación científica para reconstruir el foco y el ritmo diario.',
+  breadcrumbHome: 'Inicio',
+  level: { beginner: 'Inicio', intermediate: 'Intermedio', advanced: 'Avanzado' },
+  related: 'Relacionado',
+  startTraining: 'Practicar',
+  bestScore: 'Mejor',
+  lastScore: 'Anterior',
+  reset: 'Reiniciar',
+  start: 'Iniciar',
+  pause: 'Pausa',
+  resume: 'Continuar',
+  next: 'Siguiente ronda',
+  correct: 'Correcto',
+  wrong: 'Incorrecto',
+  ready: 'Listo',
+  round: 'Ronda',
+  time: 'Tiempo',
+  accuracy: 'Precisión',
+  settings: 'Ajustes',
+  directAnswerLabel: 'En resumen',
+  skipToContent: 'Saltar al contenido',
+  menu: 'Menú',
+  footerFaq: 'FAQ',
+  footerAboutLink: 'Acerca de',
+  footerTools: 'Herramientas',
+  footerPlans: 'Planes',
+  navAbout: 'Acerca de',
+  kindPrinciples: 'Principios',
+  kindMethods: 'Métodos',
+  kindPlans: 'Planes',
+  kindTools: 'Herramientas',
+  toolHowTo: 'Cómo usar esta herramienta',
+  toolPrinciple: 'Principio',
+  toolMethod: 'Método',
+  toolPlan: 'Plan',
+  viewAllPrinciples: 'Todos los principios',
+  viewAllFaq: 'Todas las FAQ',
+  relatedToolsTitle: 'Herramientas relacionadas',
+  updatedOn: 'Actualizado',
+  home: {
+    title: 'BrainTrainLab',
+    metaDescription:
+      'Herramientas, explicaciones y planes para recuperar el foco tras el exceso de vídeos cortos.',
+    directAnswer:
+      'BrainTrainLab ofrece ejercicios cognitivos en el navegador, divulgación y planes de entrenamiento—no es atención médica.',
+    heroLead:
+      'La atención perdida en clips infinitos puede recuperarse con práctica y ritmo. Solo divulgación, sin promesas médicas.',
+    sectionTrain: 'Empieza con las herramientas',
+    sectionTrainLead:
+      'Cinco ejercicios en el navegador: atención, reacción, memoria de trabajo, inhibición y sesiones de foco.',
+    sectionPrinciples: 'Entiende primero',
+    sectionPrinciplesLead:
+      'Sistemas de atención, bucles de recompensa y carga cognitiva—elige con criterio.',
+    sectionPlans: 'Sigue un plan',
+    sectionPlansLead:
+      'Reinicio de 7 días, foco de 21 días o mezcla de 4 semanas—corto y constante gana.',
+    sectionFaq: 'FAQ',
+    methodsLink: 'Métodos',
+    aboutLink: 'Acerca de',
+    faqLink: 'FAQ',
+  },
+  about: {
+    title: 'Acerca de BrainTrainLab',
+    metaDescription: 'Misión, límites y aviso no médico.',
+    directAnswer:
+      'Herramientas, métodos y principios para el foco y el ritmo. Qué hacemos y qué no, más abajo.',
+    weDo: 'Qué hacemos',
+    weDont: 'Qué no hacemos',
+    principles: 'Principios del contenido',
+    weDoItems: [
+      'Ejercicios cognitivos en el navegador (atención, memoria de trabajo, inhibición, ritmo)',
+      'Divulgación de ciencia del comportamiento y cognición',
+      'Métodos de entorno, hábitos y horarios',
+      'Planes que conectan lo anterior',
+    ],
+    weDontItems: [
+      'Sin diagnóstico, psicoterapia ni promesas médicas',
+      'Sin recetas ni interpretación de escalas clínicas',
+      'Sin hype de «curar» o «reconectar» el cerebro',
+    ],
+    principlesBody:
+      'Usamos términos como entrenamiento cognitivo, práctica de atención y educación. Si tienes malestar persistente, busca ayuda profesional cualificada.',
+  },
+  faq: {
+    title: 'Preguntas frecuentes',
+    metaDescription: 'Herramientas, almacenamiento local, límites y cómo empezar planes.',
+    directAnswer: 'Índice de herramientas, datos, límites e inicio—respuestas abajo.',
+  },
+  toolsIndex: {
+    title: 'Herramientas de entrenamiento',
+    metaDescription: 'Schulte, tiempo de reacción, N-Back, Stroop y temporizador de foco.',
+    lead: 'Elige una sesión que puedas terminar hoy. Las puntuaciones quedan en tu navegador.',
+  },
+  notFound: {
+    title: 'Página no encontrada',
+    description: 'La página no existe o se movió. Prueba inicio, herramientas o FAQ.',
+    heading: 'Página no encontrada',
+    try: 'Prueba',
+    home: 'Inicio',
+  },
+  disclaimer: {
+    label: 'Aviso educativo',
+    scope:
+      'El contenido es solo para entrenamiento cognitivo y educación conductual—no es consejo médico ni psicológico.',
+    help: 'Si tienes dificultades persistentes, busca ayuda de un profesional cualificado.',
+    helpPrefix: 'Si necesitas ayuda',
+  },
+};

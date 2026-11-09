@@ -1,5 +1,7 @@
 import { loadJson, saveJson } from '../shared/storage';
 import { appendSession } from '../shared/sessionLog';
+import { pageLocaleFromDocument } from '../../i18n/locale-dom';
+import { getToolMessages } from '../../i18n/tool-messages';
 
 type Phase = 'focus' | 'break' | 'longBreak';
 
@@ -37,7 +39,8 @@ function beep(enabled: boolean) {
 }
 
 export function initFocusTimer(root: HTMLElement): void {
-  const baseTitle = document.title || 'BrainTrainHub';
+  const m = getToolMessages(pageLocaleFromDocument()).focus;
+  const baseTitle = document.title || 'BrainTrainLab';
   const timeEl = root.querySelector<HTMLElement>('[data-time]')!;
   const phaseEl = root.querySelector<HTMLElement>('[data-phase]')!;
   const cycleEl = root.querySelector<HTMLElement>('[data-cycle]')!;
@@ -95,15 +98,15 @@ export function initFocusTimer(root: HTMLElement): void {
 
   function format(ms: number) {
     const total = Math.max(0, Math.ceil(ms / 1000));
-    const m = Math.floor(total / 60);
-    const s = total % 60;
-    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    const mins = Math.floor(total / 60);
+    const secs = total % 60;
+    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   }
 
   function phaseLabel() {
-    if (phase === 'focus') return '专注中';
-    if (phase === 'break') return '短休息';
-    return '长休息';
+    if (phase === 'focus') return m.phaseFocus;
+    if (phase === 'break') return m.phaseBreak;
+    return m.phaseLong;
   }
 
   function updateTitle() {
@@ -111,13 +114,13 @@ export function initFocusTimer(root: HTMLElement): void {
       document.title = baseTitle;
       return;
     }
-    document.title = `${format(remainMs)} · ${phaseLabel()} · BrainTrainHub`;
+    document.title = `${format(remainMs)} · ${phaseLabel()} · BrainTrainLab`;
   }
 
   function paint() {
     timeEl.textContent = format(remainMs);
     phaseEl.textContent = phaseLabel();
-    cycleEl.textContent = `${cycle} / ${settings().cycles}`;
+    cycleEl.textContent = m.cycleOf(cycle, settings().cycles);
     updateTitle();
   }
 
@@ -130,9 +133,9 @@ export function initFocusTimer(root: HTMLElement): void {
       if (cycle >= s.cycles) {
         running = false;
         appendSession(TOOL_KEY, { cyclesDone: s.cycles, totalMin: s.focusMin * s.cycles });
-        feedback.textContent = '本轮会话完成。记录一次真实深工，比多刷训练更重要。';
+        feedback.textContent = m.done;
         feedback.className = 'tool-feedback is-ok';
-        startBtn.textContent = '再开一轮';
+        startBtn.textContent = m.again;
         phase = 'focus';
         remainMs = s.focusMin * 60_000;
         cycle = 1;
@@ -145,18 +148,18 @@ export function initFocusTimer(root: HTMLElement): void {
       if (s.longBreakEnabled && focusCompletedInBlock % s.longBreakEvery === 0) {
         phase = 'longBreak';
         remainMs = s.longBreakMin * 60_000;
-        feedback.textContent = '长休息：离开屏幕走动或伸展。';
+        feedback.textContent = m.longBreak;
       } else {
         phase = 'break';
         remainMs = s.breakMin * 60_000;
-        feedback.textContent = '短休息：离开屏幕更好。';
+        feedback.textContent = m.shortBreak;
       }
       feedback.className = 'tool-feedback';
     } else {
       cycle += 1;
       phase = 'focus';
       remainMs = s.focusMin * 60_000;
-      feedback.textContent = `开始第 ${cycle} 段专注`;
+      feedback.textContent = m.beginFocus(cycle);
       feedback.className = 'tool-feedback is-ok';
     }
     paint();
@@ -187,9 +190,9 @@ export function initFocusTimer(root: HTMLElement): void {
     if (!running) {
       running = true;
       lastTs = 0;
-      startBtn.textContent = '进行中…';
-      pauseBtn.textContent = '暂停';
-      feedback.textContent = phase === 'focus' ? '屏蔽通知，只做一件事。' : phaseLabel();
+      startBtn.textContent = m.running;
+      pauseBtn.textContent = m.pause;
+      feedback.textContent = phase === 'focus' ? m.deepWork : phaseLabel();
       feedback.className = 'tool-feedback';
       raf = requestAnimationFrame(frame);
     }
@@ -202,9 +205,9 @@ export function initFocusTimer(root: HTMLElement): void {
     }
     running = false;
     cancelAnimationFrame(raf);
-    pauseBtn.textContent = '继续';
-    startBtn.textContent = '已暂停';
-    feedback.textContent = '已暂停';
+    pauseBtn.textContent = m.resume;
+    startBtn.textContent = m.paused;
+    feedback.textContent = m.pausedMsg;
     document.title = baseTitle;
   }
 
@@ -217,9 +220,9 @@ export function initFocusTimer(root: HTMLElement): void {
     cycle = 1;
     focusCompletedInBlock = 0;
     remainMs = s.focusMin * 60_000;
-    startBtn.textContent = '开始';
-    pauseBtn.textContent = '暂停';
-    feedback.textContent = '设定时长后开始。建议先 15–25 分钟。';
+    startBtn.textContent = m.start;
+    pauseBtn.textContent = m.pause;
+    feedback.textContent = m.idleHint;
     feedback.className = 'tool-feedback';
     document.title = baseTitle;
     paint();
@@ -229,7 +232,7 @@ export function initFocusTimer(root: HTMLElement): void {
     if (document.hidden && running) {
       wasRunningBeforeHide = true;
       pause();
-      feedback.textContent = '页面进入后台，已自动暂停。';
+      feedback.textContent = m.bgPause;
     }
   });
 

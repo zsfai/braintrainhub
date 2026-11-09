@@ -1,23 +1,28 @@
 ---
 import Breadcrumb from './Breadcrumb.astro';
-import { kindLabel, kindPath, levelLabel, type AnyEntry, type ContentKind } from '../lib/content';
+import { entrySlug, kindLabel, kindPath, levelLabel, type AnyEntry, type ContentKind } from '../lib/content';
+import { t, type Locale } from '../i18n';
 
 interface Props {
   kind: ContentKind;
   entries: AnyEntry[];
   lead: string;
+  locale?: Locale;
 }
 
-const { kind, entries, lead } = Astro.props;
-const label = kindLabel(kind);
+const { kind, entries, lead, locale = 'zh' } = Astro.props;
+const ui = t(locale);
+const label = kindLabel(kind, locale);
+const base = kindPath(kind, locale);
 ---
 
 <div class="page-container">
   <Breadcrumb
     items={[
-      { name: '首页', path: '/' },
-      { name: label, path: kindPath(kind) },
+      { name: ui.breadcrumbHome, path: '/' },
+      { name: label, path: base },
     ]}
+    locale={locale}
   />
   <header class="page-hero">
     <h1>{label}</h1>
@@ -28,11 +33,11 @@ const label = kindLabel(kind);
       entries.map((entry, index) => (
         <a
           class="index-item reveal-item"
-          href={`${kindPath(kind)}${entry.id}/`}
+          href={`${base}${entrySlug(entry.id)}/`}
           style={`transition-delay: ${index * 60}ms`}
         >
           <div class="index-item__meta">
-            <span class="badge">{levelLabel(entry.data.level)}</span>
+            <span class="badge">{levelLabel(entry.data.level, locale)}</span>
             <span>{entry.data.category}</span>
           </div>
           <h2 class="index-item__title">{entry.data.title}</h2>

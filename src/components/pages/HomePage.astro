@@ -1,0 +1,138 @@
+---
+import DirectAnswer from '../DirectAnswer.astro';
+import { getTools } from '../../lib/tools-i18n';
+import { getSorted, entrySlug, kindPath } from '../../lib/content';
+import { getFaqs } from '../../i18n/faq';
+import { localePath, t, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = t(locale);
+const home = ui.home;
+const TOOLS = getTools(locale);
+const principles = (await getSorted('principles', locale)).slice(0, 3);
+const plans = (await getSorted('plans', locale)).slice(0, 3);
+const homeFaqs = getFaqs(locale).slice(0, 3);
+const lp = (path: string) => localePath(locale, path);
+---
+
+<section class="home-hero" aria-label={ui.siteName}>
+  <div class="home-hero__bg" aria-hidden="true"></div>
+  <div class="home-hero__content">
+    <h1 class="home-hero__brand">
+      {ui.siteName}
+      <span class="home-hero__tagline">{ui.tagline}</span>
+    </h1>
+    <p class="home-hero__lead">{home.heroLead}</p>
+    <div class="btn-row">
+      <a class="btn btn--primary" href={lp('/tools/')}>{ui.ctaTrain}</a>
+      <a class="btn btn--ghost" href={lp('/principles/')}>{ui.ctaPrinciples}</a>
+    </div>
+  </div>
+</section>
+
+<section class="home-section home-section--direct">
+    <DirectAnswer text={home.directAnswer} locale={locale} />
+</section>
+
+<section class="home-section">
+  <h2>{home.sectionTrain}</h2>
+  <p class="home-section__lead">{home.sectionTrainLead}</p>
+  <div class="index-grid">
+    {
+      TOOLS.map((tool, index) => (
+        <a class="index-item reveal-item" href={tool.path} style={`transition-delay: ${index * 70}ms`}>
+          <div class="index-item__meta">
+            <span class="badge">{tool.focus}</span>
+          </div>
+          <h3 class="index-item__title">{tool.title}</h3>
+          <p class="index-item__desc">{tool.description}</p>
+        </a>
+      ))
+    }
+  </div>
+</section>
+
+<section class="home-section">
+  <h2>{home.sectionPrinciples}</h2>
+  <p class="home-section__lead">{home.sectionPrinciplesLead}</p>
+  <div class="index-grid">
+    {
+      principles.map((entry, index) => (
+        <a
+          class="index-item reveal-item"
+          href={`${kindPath('principles', locale)}${entrySlug(entry.id)}/`}
+          style={`transition-delay: ${index * 70}ms`}
+        >
+          <h3 class="index-item__title">{entry.data.title}</h3>
+          <p class="index-item__desc">{entry.data.description}</p>
+        </a>
+      ))
+    }
+  </div>
+  <p style="margin-top: 1rem;">
+    <a href={lp('/principles/')}>{ui.viewAllPrinciples} →</a>
+  </p>
+</section>
+
+<section class="home-section" style="padding-bottom: 4rem;">
+  <h2>{home.sectionPlans}</h2>
+  <p class="home-section__lead">{home.sectionPlansLead}</p>
+  <div class="index-grid">
+    {
+      plans.map((entry, index) => (
+        <a
+          class="index-item reveal-item"
+          href={`${kindPath('plans', locale)}${entrySlug(entry.id)}/`}
+          style={`transition-delay: ${index * 70}ms`}
+        >
+          <h3 class="index-item__title">{entry.data.title}</h3>
+          <p class="index-item__desc">{entry.data.description}</p>
+        </a>
+      ))
+    }
+  </div>
+  <p style="margin-top: 1rem;">
+    <a href={lp('/methods/')}>{home.methodsLink}</a>
+    ·
+    <a href={lp('/about/')}>{home.aboutLink}</a>
+    ·
+    <a href={lp('/faq/')}>{home.faqLink}</a>
+  </p>
+</section>
+
+<section class="home-section page-container--narrow" style="padding-top: 0; padding-bottom: 4rem;">
+  <h2>{home.sectionFaq}</h2>
+  <ul class="faq-list faq-list--compact">
+    {
+      homeFaqs.map((item) => (
+        <li class="faq-item">
+          <h3 class="faq-item__q">{item.question}</h3>
+          <p class="faq-item__a">{item.answer}</p>
+        </li>
+      ))
+    }
+  </ul>
+  <p style="margin-top: 0.75rem;">
+    <a href={lp('/faq/')}>{ui.viewAllFaq} →</a>
+  </p>
+</section>
+
+<script>
+  const items = document.querySelectorAll('.reveal-item');
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.12 },
+  );
+  items.forEach((item) => io.observe(item));
+</script>

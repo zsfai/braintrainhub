@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ToolDetailPage from '../../../components/pages/ToolDetailPage.astro';
+import { TOOL_SLUGS, getToolPage, toolCanonical } from '../../../lib/tool-pages';
+import { toolBreadcrumbs, toolPageUrl, toolSchemas } from '../../../lib/tool-page-seo';
+import { PREFIXED_LOCALES } from '../../../i18n/routing';
+
+export function getStaticPaths() {
+  return PREFIXED_LOCALES.flatMap((locale) =>
+    TOOL_SLUGS.map((slug) => ({
+      params: { locale, slug },
+      props: { locale, slug },
+    })),
+  );
+}
+
+const { locale, slug } = Astro.props;
+const page = getToolPage(slug, locale);
+const canonical = toolCanonical(slug);
+const schema = toolSchemas(
+  {
+    toolName: page.toolAppName,
+    url: toolPageUrl(locale, canonical),
+    description: page.description,
+    tips: page.tips,
+  },
+  locale,
+);
+---
+
+<BaseLayout
+  locale={locale}
+  title={page.title}
+  description={page.description}
+  canonical={canonical}
+  schema={schema}
+  speakable={['#direct-answer', '.tool-tips']}
+  breadcrumbs={toolBreadcrumbs(page.title, canonical, locale)}
+>
+  <ToolDetailPage locale={locale} slug={slug} />
+</BaseLayout>

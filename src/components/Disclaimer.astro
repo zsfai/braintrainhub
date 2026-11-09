@@ -1,5 +1,12 @@
 ---
-import { DISCLAIMER_PARTS } from '../utils/site';
+import { t, type Locale } from '../i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'zh' } = Astro.props;
+const d = t(locale).disclaimer;
 ---
 
 <aside class="disclaimer disclaimer--footer" role="note" aria-labelledby="disclaimer-title-footer">
@@ -9,14 +16,14 @@ import { DISCLAIMER_PARTS } from '../utils/site';
       <path d="M12 8v5M12 16h.01" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"></path>
     </svg>
     <p class="disclaimer__label" id="disclaimer-title-footer">
-      {DISCLAIMER_PARTS.label}
+      {d.label}
     </p>
   </div>
   <div class="disclaimer__body">
-    <p class="disclaimer__scope">{DISCLAIMER_PARTS.scope}</p>
+    <p class="disclaimer__scope">{d.scope}</p>
     <p class="disclaimer__help">
-      <span class="disclaimer__help-prefix">求助指引</span>
-      {DISCLAIMER_PARTS.help}
+      <span class="disclaimer__help-prefix">{d.helpPrefix}</span>
+      {d.help}
     </p>
   </div>
 </aside>

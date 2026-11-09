@@ -1,0 +1,59 @@
+---
+import Breadcrumb from '../Breadcrumb.astro';
+import DirectAnswer from '../DirectAnswer.astro';
+import { getTools } from '../../lib/tools-i18n';
+import { collectionCopy } from '../../i18n/collections';
+import { t, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = t(locale);
+const copy = collectionCopy('tools', locale);
+const TOOLS = getTools(locale);
+---
+
+<div class="page-container">
+  <Breadcrumb
+    items={[
+      { name: ui.breadcrumbHome, path: '/' },
+      { name: copy.title, path: '/tools/' },
+    ]}
+    locale={locale}
+  />
+  <header class="page-hero">
+    <h1>{copy.title}</h1>
+  </header>
+    <DirectAnswer text={copy.toolsDirectAnswer ?? ''} locale={locale} />
+  <div class="index-grid">
+    {
+      TOOLS.map((tool, index) => (
+        <a class="index-item reveal-item" href={tool.path} style={`transition-delay: ${index * 70}ms`}>
+          <div class="index-item__meta">
+            <span class="badge">{tool.focus}</span>
+          </div>
+          <h2 class="index-item__title">{tool.title}</h2>
+          <p class="index-item__desc">{tool.description}</p>
+        </a>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  const items = document.querySelectorAll('.reveal-item');
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.12 },
+  );
+  items.forEach((item) => io.observe(item));
+</script>

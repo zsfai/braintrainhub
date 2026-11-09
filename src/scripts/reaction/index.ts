@@ -3,6 +3,8 @@ import { appendSession, formatSessionTime, loadSessions } from '../shared/sessio
 import { bindKeys, mean, median, stdDev } from '../shared/keyboard';
 import { renderSessionList } from '../shared/stats';
 import { runCountdownAsync } from '../shared/countdown';
+import { pageLocaleFromDocument } from '../../i18n/locale-dom';
+import { getToolMessages } from '../../i18n/tool-messages';
 
 const STORAGE_KEY = 'bth:reaction';
 const TOOL_KEY = 'reaction';
@@ -11,6 +13,7 @@ const TRIALS_PER_BLOCK = 6;
 type Phase = 'idle' | 'countdown' | 'wait' | 'go' | 'tooSoon' | 'blockDone';
 
 export function initReaction(root: HTMLElement): void {
+  const msg = getToolMessages(pageLocaleFromDocument()).reaction;
   const stage = root.querySelector<HTMLElement>('[data-stage]')!;
   const label = root.querySelector<HTMLElement>('[data-label]')!;
   const bestEl = root.querySelector<HTMLElement>('[data-best]')!;
@@ -32,7 +35,7 @@ export function initReaction(root: HTMLElement): void {
   function paintSessions() {
     const lines = loadSessions(TOOL_KEY).map((s) => {
       const med = s.metrics.median as number;
-      return `${formatSessionTime(s.at)} · 中位 ${Math.round(med)} ms`;
+      return msg.sessionLine(formatSessionTime(s.at), med);
     });
     if (sessionsEl) renderSessionList(sessionsEl, lines);
   }
@@ -51,11 +54,11 @@ export function initReaction(root: HTMLElement): void {
 
   function armTrial() {
     clearTimeout(timer);
-    setPhase('wait', `试次 ${trialInBlock + 1}/${TRIALS_PER_BLOCK}\n等待变绿…`);
+    setPhase('wait', msg.wait(trialInBlock + 1, TRIALS_PER_BLOCK));
     const delay = 1200 + Math.random() * 2800;
     timer = window.setTimeout(() => {
       goAt = performance.now();
-      setPhase('go', '点击！');
+      setPhase('go', msg.go);
     }, delay);
   }
 
@@ -68,9 +71,9 @@ export function initReaction(root: HTMLElement): void {
     paintBest();
     appendSession(TOOL_KEY, { median: med, mean: mn, sd, min, n: blockRts.length });
     paintSessions();
-    summaryEl.textContent = `本组：中位 ${Math.round(med)} ms · 均值 ${Math.round(mn)} · 标准差 ${Math.round(sd)} · 最快 ${Math.round(min)} ms`;
-    setPhase('blockDone', `${Math.round(med)} ms\n（组中位）`);
-    startBtn.textContent = '再来一组';
+    summaryEl.textContent = msg.summary(med, mn, sd, min);
+    setPhase('blockDone', msg.blockDone(med));
+    startBtn.textContent = msg.again;
     startBtn.disabled = false;
   }
 
@@ -92,7 +95,7 @@ export function initReaction(root: HTMLElement): void {
     if (phase === 'countdown') return;
     if (phase === 'wait') {
       clearTimeout(timer);
-      setPhase('tooSoon', '太早！本轮不计入，点击继续');
+      setPhase('tooSoon', msg.tooSoon);
       phase = 'tooSoon';
       return;
     }
@@ -107,7 +110,7 @@ export function initReaction(root: HTMLElement): void {
       if (trialInBlock >= TRIALS_PER_BLOCK) {
         finishBlock();
       } else {
-        setPhase('wait', `${Math.round(rt)} ms\n准备下一次…`);
+        setPhase('wait', msg.rt(rt));
         window.setTimeout(armTrial, 600);
       }
     }
@@ -116,7 +119,7 @@ export function initReaction(root: HTMLElement): void {
   stage.addEventListener('click', onTap);
   startBtn.addEventListener('click', () => void startBlock());
   bindKeys({ ' ': onTap, enter: onTap });
-  setPhase('idle', '点击或按 Space 开始一组（6 次有效试次）');
+  setPhase('idle', msg.idle);
   paintBest();
   paintSessions();
   summaryEl.textContent = '';
