@@ -48,6 +48,8 @@ export function toolSchemas(
     howToSchema({
       name: howToName,
       description: opts.description,
+      url: opts.url,
+      locale,
       steps: opts.tips.map((text, index) => ({
         name: `${stepLabel} ${index + 1}`,
         text,

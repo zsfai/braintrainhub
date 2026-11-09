@@ -15,7 +15,7 @@ const { locale } = Astro.props;
 const ui = t(locale);
 const faq = ui.faq;
 const items = getFaqs(locale);
-const schema = faqPageSchema(absUrl('/faq/', locale), items);
+const schema = faqPageSchema(absUrl('/faq/', locale), items, locale);
 ---
 
 <BaseLayout

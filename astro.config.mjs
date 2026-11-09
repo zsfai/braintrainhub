@@ -2,14 +2,26 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
+const SITE = 'https://braintrainlab.com';
+
 export default defineConfig({
-  site: 'https://braintrainlab.com',
+  site: SITE,
   integrations: [
     sitemap({
-      changefreq: 'weekly',
-      priority: 0.7,
+      i18n: {
+        defaultLocale: 'zh',
+        locales: {
+          zh: 'zh-CN',
+          en: 'en',
+          es: 'es',
+          ja: 'ja',
+          ko: 'ko',
+          ru: 'ru',
+        },
+      },
+      filter: (page) => !page.includes('404'),
       serialize(item) {
-        if (item.url === 'https://braintrainlab.com/') {
+        if (item.url === `${SITE}/`) {
           return { ...item, priority: 1.0, changefreq: 'daily' };
         }
         if (item.url.includes('/faq/')) {

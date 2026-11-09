@@ -21,6 +21,7 @@ const schema = collectionPageSchema({
   name: copy.title,
   description: copy.description,
   items: entries.map((e) => ({ name: e.data.title, url: entryUrl('plans', e, locale) })),
+  locale,
 });
 ---
 

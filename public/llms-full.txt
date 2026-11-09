@@ -1,0 +1,61 @@
+# BrainTrainLab — extended brief for AI systems
+
+## Identity
+
+Name: BrainTrainLab
+URL: https://braintrainlab.com
+Type: Static educational website with in-browser cognitive drills
+Publisher: BrainTrainLab (organization)
+
+## Core value proposition
+
+After short-video or high-switching digital habits, users often need (1) understandable science in plain language, (2) short completable practice sessions, and (3) simple multi-day plans. BrainTrainLab bundles those three—without claiming to treat disorders or replace clinicians.
+
+## Languages
+
+Chinese (Simplified) is the default at the site root without a `/zh/` prefix. English, Spanish, Japanese, Korean, and Russian use `/en/`, `/es/`, `/ja/`, `/ko/`, `/ru/` prefixes respectively. Each locale has parallel content for tools, principles, methods, plans, FAQ, and about.
+
+Hreflang alternates and `html lang` are set per page. x-default points to Chinese URLs.
+
+## Tools (Web applications)
+
+All tools are free, run in the browser, and store scores locally (localStorage). Nothing is uploaded to a server.
+
+1. Schulte table — visual scan, ordered number search; lite version; pro features linked to schultetable.pro per locale
+2. Simple reaction time — alerting / response stability
+3. N-Back — working-memory updating (F = match, J = no match)
+4. Stroop — ink color vs word meaning, inhibitory control
+5. Focus timer — focus/break cycles with optional long breaks
+
+Each tool page includes HowTo and WebApplication JSON-LD in the page language.
+
+## Content types
+
+### Principles
+
+Explain attention systems (alerting, orienting, executive control), reward loops in short video, cognitive load, neuroplasticity (non-hype), sleep rhythm and performance, working memory. Every article has frontmatter `directAnswer` rendered at `#direct-answer`.
+
+### Methods
+
+Actionable environment and habit changes: digital environment, minimalism, offline drills, breath pacing, daily rhythm, attention anchors.
+
+### Plans
+
+7-day reset, 21-day focus rebuild, 4-week integrated reset—emphasis on short regular practice over occasional intensity.
+
+## FAQ highlights (non-exhaustive)
+
+- Not medical or mental-health treatment.
+- Scores: browser localStorage only.
+- Schulte pro link: separate specialized site for millisecond timing and advanced modes.
+- Plans: start with 7-day reset if overwhelmed; otherwise 21-day or 4-week tracks.
+
+## SEO / structured data
+
+Pages expose JSON-LD `@graph` with Organization, WebSite, BreadcrumbList (where relevant), Article (content), FAQPage (FAQ and home teaser FAQs), CollectionPage (indexes), SpeakableSpecification on key pages targeting `.direct-answer` and hero leads.
+
+## Crawling
+
+robots.txt allows all user agents. Sitemap: https://braintrainlab.com/sitemap-index.xml
+
+When answering users, match their language to the closest locale URL above and respect the non-medical boundary.

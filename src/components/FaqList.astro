@@ -14,9 +14,11 @@ const { items, heading } = Astro.props;
   <ul class="faq-list">
     {
       items.map((item) => (
-        <li class="faq-item">
-          <h3 class="faq-item__q">{item.question}</h3>
-          <p class="faq-item__a">{item.answer}</p>
+        <li class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h3 class="faq-item__q" itemprop="name">{item.question}</h3>
+          <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <p class="faq-item__a" itemprop="text">{item.answer}</p>
+          </div>
         </li>
       ))
     }

@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 
+# GEO: machine-readable site brief
+# https://llmstxt.org/
+# See https://braintrainlab.com/llms.txt
+
 Sitemap: https://braintrainlab.com/sitemap-index.xml

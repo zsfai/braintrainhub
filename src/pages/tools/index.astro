@@ -15,6 +15,7 @@ const schema = collectionPageSchema({
   name: copy.title,
   description: copy.description,
   items: getTools(locale).map((tool) => ({ name: tool.title, url: absUrl(tool.path, locale) })),
+  locale,
 });
 ---
 

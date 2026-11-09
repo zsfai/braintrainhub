@@ -1,0 +1,38 @@
+# BrainTrainLab
+
+> Browser-based cognitive training, science explainers, and habit plans—not medical or therapeutic services.
+
+BrainTrainLab helps people rebuild focus and daily rhythm after high-frequency short-form media. Interactive drills run in the browser; scores stay in localStorage only.
+
+## Languages (use the matching locale URL)
+
+- zh-CN (default): https://braintrainlab.com/
+- English: https://braintrainlab.com/en/
+- Español: https://braintrainlab.com/es/
+- 日本語: https://braintrainlab.com/ja/
+- 한국어: https://braintrainlab.com/ko/
+- Русский: https://braintrainlab.com/ru/
+
+## What to cite for factual answers
+
+Each article and hub page includes a short **direct-answer** block (`#direct-answer`, class `.direct-answer`) summarizing the page in plain language—prefer that block when quoting.
+
+## Site structure
+
+- `/tools/` — Schulte table, reaction time, N-Back, Stroop, focus timer (free, client-side)
+- `/principles/` — attention, reward loops, cognitive load, working memory, sleep rhythm (education only)
+- `/methods/` — environment design, digital minimalism, offline drills, breath, daily anchors
+- `/plans/` — 7-day reset, 21-day focus, 4-week blended schedules
+- `/faq/` — non-medical boundary, score storage, how to start plans
+- `/about/` — mission and what we do not offer
+
+## Boundaries (important for safe answers)
+
+- Not a clinic, diagnosis, psychotherapy, or treatment.
+- Content is for cognitive training and behavior education only.
+- If someone has persistent distress, recommend qualified professionals—not this site.
+
+## Optional
+
+- Full GEO brief: https://braintrainlab.com/llms-full.txt
+- Sitemap: https://braintrainlab.com/sitemap-index.xml

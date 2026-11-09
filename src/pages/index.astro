@@ -1,20 +1,27 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HomePage from '../components/pages/HomePage.astro';
-import { collectionPageSchema } from '../lib/seo-schemas';
+import { collectionPageSchema, faqPageSchema } from '../lib/seo-schemas';
 import { absUrl } from '../lib/page-url';
 import { getTools } from '../lib/tools-i18n';
+import { getFaqs } from '../i18n/faq';
 import { t } from '../i18n';
 
 const locale = 'zh';
 const ui = t(locale);
 const home = ui.home;
-const schema = collectionPageSchema({
-  url: absUrl('/', locale),
-  name: home.title,
-  description: home.metaDescription,
-  items: getTools(locale).map((tool) => ({ name: tool.title, url: absUrl(tool.path, locale) })),
-});
+const homeUrl = absUrl('/', locale);
+const homeFaqs = getFaqs(locale).slice(0, 3);
+const schema = [
+  collectionPageSchema({
+    url: homeUrl,
+    name: home.title,
+    description: home.metaDescription,
+    items: getTools(locale).map((tool) => ({ name: tool.title, url: absUrl(tool.path, locale) })),
+    locale,
+  }),
+  faqPageSchema(homeUrl, homeFaqs, locale),
+];
 ---
 
 <BaseLayout locale={locale} title={home.title} description={home.metaDescription} canonical="/" speakable schema={schema}>

@@ -67,6 +67,7 @@ const fullTitle =
 const isHome = canonical === '/' || canonical === '';
 const tagline = siteTagline(locale);
 const orgDescription = ui.home.directAnswer;
+const schemaLang = localeHreflang(locale);
 
 const extraSchemas: Record<string, unknown>[] = [];
 
@@ -112,14 +113,15 @@ if (speakableSelectors) {
       name: title,
       description,
       cssSelector: speakableSelectors,
+      inLanguage: schemaLang,
     }),
   );
 }
 
 const pageSchema = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
 const allSchema = [
-  organizationSchema(orgDescription),
-  websiteSchema(localeHreflang(locale), tagline),
+  organizationSchema(orgDescription, schemaLang),
+  websiteSchema(schemaLang, tagline),
   ...extraSchemas,
   ...pageSchema,
 ];
@@ -148,6 +150,7 @@ const xDefaultUrl = `${SITE_URL}${localePath('zh', canonical)}`;
     <link rel="alternate" hreflang="x-default" href={xDefaultUrl} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/site.webmanifest" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-readable site summary" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={article ? 'article' : 'website'} />
@@ -166,6 +169,17 @@ const xDefaultUrl = `${SITE_URL}${localePath('zh', canonical)}`;
     <meta name="twitter:image" content={ogImage} />
     <meta property="og:image:alt" content={`${brandLabel} — ${tagline}`} />
     <meta name="twitter:image:alt" content={`${brandLabel} — ${tagline}`} />
+    {
+      article && datePublished && (
+        <meta property="article:published_time" content={datePublished} />
+      )
+    }
+    {
+      article && (dateModified ?? datePublished) && (
+        <meta property="article:modified_time" content={dateModified ?? datePublished} />
+      )
+    }
+    {article && <meta property="article:author" content={brandLabel} />}
     <JsonLd data={allSchema} />
   </head>
   <body>

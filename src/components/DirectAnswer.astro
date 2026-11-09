@@ -10,7 +10,7 @@ const { text, locale = 'zh' } = Astro.props;
 const ui = t(locale);
 ---
 
-<section id="direct-answer" class="direct-answer" data-geo="direct-answer" itemprop="abstract">
+<section id="direct-answer" class="direct-answer" data-geo="direct-answer" role="region" aria-label={ui.directAnswerLabel}>
   <p class="direct-answer__label">{ui.directAnswerLabel}</p>
   <p class="direct-answer__text">{text}</p>
 </section>

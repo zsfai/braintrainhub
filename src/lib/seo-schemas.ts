@@ -1,12 +1,19 @@
-import { SITE_URL } from '../utils/site';
+import type { Locale } from '../i18n/types';
+import { localeHreflang } from '../i18n';
 
 export type FaqItem = { question: string; answer: string };
 
-export function faqPageSchema(url: string, items: FaqItem[]) {
+export function schemaInLanguage(locale: Locale): string {
+  return localeHreflang(locale);
+}
+
+export function faqPageSchema(url: string, items: FaqItem[], locale: Locale) {
+  const inLanguage = schemaInLanguage(locale);
   return {
     '@type': 'FAQPage',
+    '@id': `${url}#faq`,
     url,
-    inLanguage: 'zh-CN',
+    inLanguage,
     mainEntity: items.map((item) => ({
       '@type': 'Question',
       name: item.question,
@@ -23,13 +30,16 @@ export function collectionPageSchema(opts: {
   name: string;
   description: string;
   items: { name: string; url: string }[];
+  locale: Locale;
 }) {
+  const inLanguage = schemaInLanguage(opts.locale);
   return {
     '@type': 'CollectionPage',
+    '@id': `${opts.url}#collection`,
     name: opts.name,
     description: opts.description,
     url: opts.url,
-    inLanguage: 'zh-CN',
+    inLanguage,
     mainEntity: {
       '@type': 'ItemList',
       itemListElement: opts.items.map((item, index) => ({
@@ -46,21 +56,20 @@ export function howToSchema(opts: {
   name: string;
   description: string;
   steps: { name: string; text: string }[];
+  locale: Locale;
+  url?: string;
 }) {
+  const inLanguage = schemaInLanguage(opts.locale);
   return {
     '@type': 'HowTo',
+    '@id': opts.url ? `${opts.url}#howto` : undefined,
     name: opts.name,
     description: opts.description,
-    inLanguage: 'zh-CN',
+    inLanguage,
     step: opts.steps.map((step) => ({
       '@type': 'HowToStep',
       name: step.name,
       text: step.text,
     })),
   };
-}
-
-export function absUrl(path: string) {
-  const p = path.startsWith('/') ? path : `/${path}`;
-  return `${SITE_URL}${p}`;
 }

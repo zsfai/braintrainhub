@@ -3,29 +3,48 @@ export const SITE_NAME = 'BrainTrainLab';
 export const SITE_TAGLINE = '认知训练与专注力重建';
 export const OG_IMAGE = `${SITE_URL}/og.svg`;
 export const THEME_COLOR = '#0F766E';
+export const ORG_ID = `${SITE_URL}/#organization`;
+export const WEBSITE_ID = `${SITE_URL}/#website`;
 
 export type BreadcrumbItem = {
   name: string;
   path: string;
 };
 
-export function organizationSchema(description: string) {
+const KNOWS_ABOUT = [
+  'Cognitive training',
+  'Attention',
+  'Working memory',
+  'Executive function',
+  'Focus and productivity',
+  'Digital wellness',
+] as const;
+
+export function organizationSchema(description: string, inLanguage: string) {
   return {
     '@type': 'Organization',
+    '@id': ORG_ID,
     name: SITE_NAME,
     url: SITE_URL,
     description,
-    logo: `${SITE_URL}/favicon.svg`,
+    inLanguage,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${SITE_URL}/favicon.svg`,
+    },
+    knowsAbout: [...KNOWS_ABOUT],
   };
 }
 
-export function websiteSchema(inLanguage = 'zh-CN', description = SITE_TAGLINE) {
+export function websiteSchema(inLanguage: string, description: string) {
   return {
     '@type': 'WebSite',
+    '@id': WEBSITE_ID,
     name: SITE_NAME,
     url: SITE_URL,
     inLanguage,
     description,
+    publisher: { '@id': ORG_ID },
   };
 }
 
@@ -36,7 +55,7 @@ export function breadcrumbSchema(items: BreadcrumbItem[]) {
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,
-      item: `${SITE_URL}${item.path}`,
+      item: item.path.startsWith('http') ? item.path : `${SITE_URL}${item.path}`,
     })),
   };
 }
@@ -49,18 +68,21 @@ export function articleSchema(opts: {
   dateModified?: string;
   inLanguage?: string;
 }) {
+  const lang = opts.inLanguage ?? 'zh-CN';
   return {
     '@type': 'Article',
+    '@id': `${opts.url}#article`,
     headline: opts.title,
     description: opts.description,
     url: opts.url,
-    inLanguage: opts.inLanguage ?? 'zh-CN',
-    author: {
-      '@type': 'Organization',
-      name: SITE_NAME,
-    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': opts.url },
+    image: [OG_IMAGE],
+    inLanguage: lang,
+    isAccessibleForFree: true,
+    author: { '@type': 'Organization', '@id': ORG_ID, name: SITE_NAME },
     publisher: {
       '@type': 'Organization',
+      '@id': ORG_ID,
       name: SITE_NAME,
       logo: {
         '@type': 'ImageObject',
@@ -77,12 +99,16 @@ export function speakableWebPage(opts: {
   name: string;
   description: string;
   cssSelector: string[];
+  inLanguage: string;
 }) {
   return {
     '@type': 'WebPage',
+    '@id': opts.url,
     url: opts.url,
     name: opts.name,
     description: opts.description,
+    inLanguage: opts.inLanguage,
+    isPartOf: { '@id': WEBSITE_ID },
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: opts.cssSelector,
@@ -97,16 +123,20 @@ export function webApplicationSchema(opts: {
   locale?: string;
 }) {
   const lang = opts.locale ?? 'zh';
+  const inLanguage = lang === 'zh' ? 'zh-CN' : lang === 'en' ? 'en' : lang;
   const currency = lang === 'zh' ? 'CNY' : 'USD';
   return {
     '@type': 'WebApplication',
+    '@id': `${opts.url}#app`,
     name: opts.name,
     url: opts.url,
     applicationCategory: 'EducationalApplication',
     operatingSystem: 'Web Browser',
-    inLanguage: lang === 'zh' ? 'zh-CN' : lang,
+    browserRequirements: 'Requires JavaScript',
+    inLanguage,
     offers: { '@type': 'Offer', price: '0', priceCurrency: currency },
     description: opts.description,
+    provider: { '@id': ORG_ID },
   };
 }
 
