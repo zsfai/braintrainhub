@@ -24,7 +24,7 @@ relatedTools:
 2. **定向（orienting）**：把注意投向某个位置、声音或信息通道。
 3. **执行控制（executive control）**：在冲突、干扰中维持目标，抑制冲动反应。
 
-在线训练里，[简单反应时](/tools/reaction/)更贴近警觉；[舒尔特方格](/tools/schulte/)练定向扫描（进阶完整版见 [舒尔特方格 · schultetable.pro](https://schultetable.pro/zh/)）；[斯特鲁普](/tools/stroop/)则更考验执行控制。
+在线训练里，[简单反应时](/tools/reaction/)更贴近警觉；[舒尔特方格](/tools/schulte/)练定向扫描（进阶完整版见 [舒尔特方格 · schultetable.pro](https://schultetable.pro/)）；[斯特鲁普](/tools/stroop/)则更考验执行控制。
 
 ## 为什么短视频特别「费切换」
 
