@@ -59,7 +59,11 @@ const {
 const ui = t(locale);
 const pagePath = localePath(locale, canonical);
 const pageUrl = `${SITE_URL}${pagePath}`;
-const fullTitle = title.includes(SITE_NAME) ? title : `${title} · ${SITE_NAME}`;
+const brandLabel = ui.siteName;
+const fullTitle =
+  title.includes(SITE_NAME) || title.includes(brandLabel)
+    ? title
+    : `${title} · ${brandLabel}`;
 const isHome = canonical === '/' || canonical === '';
 const tagline = siteTagline(locale);
 const orgDescription = ui.home.directAnswer;
@@ -133,7 +137,7 @@ const xDefaultUrl = `${SITE_URL}${localePath('zh', canonical)}`;
       name="robots"
       content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'}
     />
-    <meta name="author" content={SITE_NAME} />
+    <meta name="author" content={brandLabel} />
     <meta name="theme-color" content={THEME_COLOR} />
     <link rel="canonical" href={pageUrl} />
     {
@@ -148,7 +152,7 @@ const xDefaultUrl = `${SITE_URL}${localePath('zh', canonical)}`;
     <meta property="og:description" content={description} />
     <meta property="og:type" content={article ? 'article' : 'website'} />
     <meta property="og:url" content={pageUrl} />
-    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:site_name" content={brandLabel} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:locale" content={localeOg(locale)} />
     {
@@ -160,8 +164,8 @@ const xDefaultUrl = `${SITE_URL}${localePath('zh', canonical)}`;
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
-    <meta property="og:image:alt" content={`${SITE_NAME} — ${tagline}`} />
-    <meta name="twitter:image:alt" content={`${SITE_NAME} — ${tagline}`} />
+    <meta property="og:image:alt" content={`${brandLabel} — ${tagline}`} />
+    <meta name="twitter:image:alt" content={`${brandLabel} — ${tagline}`} />
     <JsonLd data={allSchema} />
   </head>
   <body>

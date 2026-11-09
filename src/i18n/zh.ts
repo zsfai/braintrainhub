@@ -2,7 +2,7 @@ import type { UiDict } from './types';
 
 export const zh: UiDict = {
   siteName: 'BrainTrainLab',
-  tagline: '认知训练与专注力重建',
+  tagline: '认知训练与专注节律重建',
   nav: [
     { href: '/tools/', label: '训练工具' },
     { href: '/principles/', label: '原理科普' },
@@ -13,7 +13,7 @@ export const zh: UiDict = {
   ctaTrain: '开始训练',
   ctaPrinciples: '了解原理',
   footerAbout:
-    'BrainTrainLab 收集认知训练工具、方法与科普知识，帮助重建专注与生活节律。',
+    'BrainTrainLab 汇集认知训练工具、方法手段与原理科普，帮助重建专注与生活节律。',
   breadcrumbHome: '首页',
   level: { beginner: '入门', intermediate: '进阶', advanced: '挑战' },
   related: '相关阅读',
@@ -55,9 +55,9 @@ export const zh: UiDict = {
   home: {
     title: 'BrainTrainLab',
     metaDescription:
-      'BrainTrainLab：认知训练工具、原理科普与可执行计划，帮助从短视频碎片化中重建专注与生活节律。',
+      'BrainTrainLab：在线认知训练、原理科普与可执行计划，帮助从短视频碎片化中重建专注与生活节律。',
     directAnswer:
-      'BrainTrainLab 提供在线认知训练、原理科普与可执行计划，面向短视频碎片化后的专注力与节律重建；内容仅供科普，非医疗服务。',
+      'BrainTrainLab 提供浏览器内认知训练、原理科普与可执行计划，面向短视频碎片化后的专注力与节律重建；内容仅供科普，非医疗服务。',
     heroLead:
       '短视频抽走的注意力，可以用训练与节律一点点找回来。这里有工具、原理与计划——只做专业科普，不做医疗承诺。',
     sectionTrain: '从训练开始',
@@ -75,7 +75,7 @@ export const zh: UiDict = {
     title: '关于 BrainTrainLab',
     metaDescription: 'BrainTrainLab 的使命、内容边界与非医疗声明。',
     directAnswer:
-      'BrainTrainLab 收集认知训练工具、方法手段与原理科普，帮助重建专注与生活节律；具体边界见下文「我们做什么 / 我们不做什么」。',
+      'BrainTrainLab 汇集认知训练工具、方法手段与原理科普，帮助重建专注与生活节律；具体边界见下文「我们做什么 / 我们不做什么」。',
     weDo: '我们做什么',
     weDont: '我们不做什么',
     principles: '内容原则',
@@ -95,7 +95,8 @@ export const zh: UiDict = {
   },
   faq: {
     title: '常见问题',
-    metaDescription: 'BrainTrainLab 训练工具、成绩存储、内容边界与计划入门等常见问题。',
+    metaDescription:
+      'BrainTrainLab 训练工具、成绩存储、内容边界与训练计划入门等常见问题。',
     directAnswer: '汇总训练工具、成绩存储、内容边界与计划入门等问题；详细答案见下方列表。',
   },
   toolsIndex: {
